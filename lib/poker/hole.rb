@@ -1,3 +1,6 @@
+# http://en.wikipedia.org/wiki/Glossary_of_poker_terms#hole
+#
+# The two cards dealt to a player
 class Hole
   attr_reader :cards
   
@@ -25,5 +28,4 @@ class Hole
   def fold
     @cards.clear
   end
-  
 end

@@ -26,5 +26,4 @@ class Player
   def playing?
     !folded?
   end
-  
 end

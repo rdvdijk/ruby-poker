@@ -55,5 +55,4 @@ class Table
   def add_card
     @cards << @deck.random_card
   end
-  
 end
