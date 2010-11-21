@@ -18,6 +18,10 @@ class Hand
     @cards.empty?
   end
   
+  def dealt?
+    @cards.size == 2
+  end
+  
   def fold
     @cards.clear
   end

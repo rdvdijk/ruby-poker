@@ -15,8 +15,16 @@ class Player
     @hand.fold
   end
   
+  def dealt?
+    @hand.dealt?
+  end
+  
   def folded?
     @hand.empty?
+  end
+  
+  def playing?
+    !folded?
   end
   
 end
