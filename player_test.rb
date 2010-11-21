@@ -13,21 +13,21 @@ class PlayerTest < ActiveSupport::TestCase
     assert_not_nil player
   end
   
-  test "initializing player should result in a player with an empty hand" do
+  test "initializing player should result in a player with an empty hole" do
     player = Player.new("John")
-    assert player.hand.empty?
+    assert player.hole.empty?
   end
   
-  test "initializing player should result in a player without a dealt hand" do
+  test "initializing player should result in a player without a dealt hole" do
     player = Player.new("John")
     assert !player.dealt?
   end
   
-  test "giving a card to a player should add that card to the hand" do
+  test "giving a card to a player should add that card to the hole" do
     player = Player.new("John")
     card = Deck.new.random_card
     player.give_card card
-    assert player.hand.include? card
+    assert player.hole.include? card
   end
 
   test "dealing to a player should give a dealt player" do
@@ -37,7 +37,7 @@ class PlayerTest < ActiveSupport::TestCase
     assert player.dealt?
   end
   
-  test "folding the player should fold the players hand" do
+  test "folding the player should fold the players hole" do
     player = Player.new("John")
     deck = Deck.new
     2.times { player.give_card deck.random_card }

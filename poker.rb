@@ -1,5 +1,5 @@
 require 'poker/card'
 require 'poker/deck'
-require 'poker/hand'
+require 'poker/hole'
 require 'poker/player'
 require 'poker/table'

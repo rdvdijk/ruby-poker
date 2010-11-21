@@ -22,7 +22,7 @@ class TableTest < ActiveSupport::TestCase
     end
   end
   
-  test "dealing the players should give a hand to all players" do
+  test "dealing the players should give a hole to all players" do
     john = Player.new("John")
     paul = Player.new("Paul")
     @table.add_player john
