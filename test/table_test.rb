@@ -12,21 +12,21 @@ class TableTest < ActiveSupport::TestCase
   
   test "adding a player to a table should add the player" do
     player = Player.new("John")
-    @table.add_player player
+    player.sit_down @table
     @table.has_player? player
   end
   
   test "adding an 11th player to the table should fail" do
     assert_raise RuntimeError do
-      11.times { @table.add_player Player.new("John") }
+      11.times { Player.new("John").sit_down @table }
     end
   end
   
   test "dealing the players should give a hole to all players" do
     john = Player.new("John")
     paul = Player.new("Paul")
-    @table.add_player john
-    @table.add_player paul
+    john.sit_down @table
+    paul.sit_down @table
     @table.deal
     assert john.dealt?
     assert paul.dealt?
@@ -48,6 +48,18 @@ class TableTest < ActiveSupport::TestCase
     @table.turn
     @table.river
     assert 5, @table.cards.size
+  end
+
+  test "determining the winner finds the highest winner(s)" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.deal
+    @table.flop
+    @table.turn
+    @table.river
+    winner = @table.winner
   end
 
 end

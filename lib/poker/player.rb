@@ -26,4 +26,17 @@ class Player
   def playing?
     !folded?
   end
+  
+  def sit_down(table)
+    @table = table
+    @table.add_player self
+  end
+  
+  def hand
+    @hand ||= Hand.new(@table.cards, @hole)
+  end
+  
+  def to_s
+    "#{@name} (#{@hole})"
+  end
 end

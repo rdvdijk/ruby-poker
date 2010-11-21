@@ -28,4 +28,8 @@ class Hole
   def fold
     @cards.clear
   end
+  
+  def to_s
+    "#{@cards.join(' ')}"
+  end
 end

@@ -45,9 +45,8 @@ class Table
   end
   
   def winner
-    active_players = @players.select(&:playing)
-    active_player.sort { |a,b|
-      }
+    active_players = @players.select(&:playing?)
+    active_players.sort_by { |player| player.hand }
   end
   
   private
