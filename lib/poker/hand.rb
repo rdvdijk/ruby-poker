@@ -8,6 +8,15 @@ class Hand
   
   def <=>(other)
     # TODO: poker hand logic goes here
+    
+    # one way:
+    #   http://nsayer.blogspot.com/2007/07/algorithm-for-evaluating-poker-hands.html
+    # or a big table of all hands:
+    #   http://www.suffecool.net/poker/evaluator.html
+    # round-up:
+    #   http://www.codingthewheel.com/archives/poker-hand-evaluator-roundup
+    
+    # dummy:
     @cards.last.to_s <=> other.cards.last.to_s
   end
   
