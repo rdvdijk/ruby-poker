@@ -4,15 +4,10 @@ class HandTest < ActiveSupport::TestCase
 
   test "a 'high cards' hand should return HighCards hand" do
     hole = Hole.new
-    hole << Card.new(:"3", :clubs)
-    hole << Card.new(:"2", :hearts)
+    hole << Card.new(:"2", :clubs)
+    hole << Card.new(:"3", :hearts)
     
-    cards = []
-    cards << Card.new(:"5", :spades)
-    cards << Card.new(:"6", :diamonds)
-    cards << Card.new(:"8", :hearts)
-    cards << Card.new(:"9", :clubs)
-    cards << Card.new(:J, :spades)
+    cards = high_cards
     
     combinations = Hand.determine_hand(cards, hole)
     
@@ -21,86 +16,96 @@ class HandTest < ActiveSupport::TestCase
     end
   end
 
+  # straight flush -----------------------------------------------------------
   test "a straight flush hand should be straight flush" do
-    pending
-    #assert Hand.straight_flush?(straight_flush)
+    assert StraightFlush.is?(straight_flush)
   end
 
   test "a non straight flush hand should not return straight flush" do
-    pending
-    #assert !Hand.straight_flush?(high_cards)
+    assert !StraightFlush.is?(high_cards)
   end
 
   # four of a kind -----------------------------------------------------------
   test "a four of a kind hand should return four of a kind" do
-    assert Hand.four_of_a_kind?(four_of_a_kind)
+    assert FourOfAKind.is?(four_of_a_kind)
   end
 
   test "a non four of a kind hand should not return four of a kind" do
-    assert !Hand.four_of_a_kind?(high_cards)
+    assert !FourOfAKind.is?(high_cards)
   end
 
   # full house ---------------------------------------------------------------
   test "a full house hand should return full house" do
-    assert Hand.full_house?(full_house)
+    assert FullHouse.is?(full_house)
   end
 
   test "a non full house hand should not return full house" do
-    assert !Hand.full_house?(high_cards)
+    assert !FullHouse.is?(high_cards)
   end
 
   # flush --------------------------------------------------------------------
   test "a flush hand should return flush" do
-    assert Hand.flush?(flush)
+    assert Flush.is?(flush)
   end
 
   test "a non flush hand should not return flush" do
-    assert !Hand.flush?(high_cards)
+    assert !Flush.is?(high_cards)
   end
 
   # straight -----------------------------------------------------------------
   test "a straight hand should return straight" do
-    pending
-    #assert Hand.straight?(straight)
+    assert Straight.is?(straight)
+  end
+
+  test "a non straight hand should not return straight" do
+    assert !Straight.is?(high_cards)
+  end
+
+  test "a five-high straight hand should return straight" do
+    assert Straight.is?(straight_five_high)
+  end
+
+  test "a non consecutive cards hand should not return straight" do
+    assert !Straight.is?(non_consecutive_hand)
   end
 
   # three of a kind ----------------------------------------------------------
   test "a three of a kind hand should return three of a kind" do
-    assert Hand.three_of_a_kind?(three_of_a_kind)
+    assert ThreeOfAKind.is?(three_of_a_kind)
   end
 
   test "a non three of a kind hand should not return two pair" do
-    assert !Hand.three_of_a_kind?(high_cards)
+    assert !ThreeOfAKind.is?(high_cards)
   end
 
   test "a full house hand should not return three of a kind" do
-    assert !Hand.three_of_a_kind?(full_house)
+    assert !ThreeOfAKind.is?(full_house)
   end
 
   test "a four of a kind hand should not return three of a kind" do
-    assert !Hand.three_of_a_kind?(four_of_a_kind)
+    assert !ThreeOfAKind.is?(four_of_a_kind)
   end
 
   # two pair -----------------------------------------------------------------
   test "a two pair hand should return two pair" do
-    assert Hand.two_pair?(two_pair)
+    assert TwoPair.is?(two_pair)
   end
 
   test "a non two pair hand should not return two pair" do
-    assert !Hand.two_pair?(high_cards)
+    assert !TwoPair.is?(high_cards)
   end
 
   test "a three of a kind hand should not return two pair" do
-    assert !Hand.two_pair?(three_of_a_kind)
+    assert !TwoPair.is?(three_of_a_kind)
   end
 
   # one pair -----------------------------------------------------------------
   test "a one pair hand should return one pair" do
-    assert Hand.one_pair?(one_pair)
+    assert OnePair.is?(one_pair)
   end
 
   test "a non one pair hand should not return one pair" do
-    assert !Hand.one_pair?(high_cards)
+    assert !OnePair.is?(high_cards)
   end
 
   private
@@ -152,6 +157,26 @@ class HandTest < ActiveSupport::TestCase
       Card.new(:"7", :spades),
       Card.new(:"8", :clubs),
       Card.new(:"9", :diamonds)
+    ]
+  end
+
+  def straight_five_high
+    [
+      Card.new(:"A", :spades),
+      Card.new(:"2", :hearts),
+      Card.new(:"3", :spades),
+      Card.new(:"4", :clubs),
+      Card.new(:"5", :diamonds)
+    ]
+  end
+  
+  def non_consecutive_hand
+    [
+      Card.new(:"A", :spades),
+      Card.new(:"2", :hearts),
+      Card.new(:"4", :spades),
+      Card.new(:"4", :clubs),
+      Card.new(:"5", :diamonds)
     ]
   end
 
