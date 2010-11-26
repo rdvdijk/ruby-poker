@@ -22,4 +22,8 @@ class Card
   def to_s
     "#{@value}#{SUIT_CHARACTER[@suit]}"
   end
+  
+  def inspect
+    to_s
+  end
 end

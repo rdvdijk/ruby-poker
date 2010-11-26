@@ -1,11 +1,12 @@
 # http://en.wikipedia.org/wiki/Glossary_of_poker_terms#hole
 #
 # The two cards dealt to a player
+require 'set'
 class Hole
   attr_reader :cards
   
   def initialize
-    @cards = []
+    @cards = Set.new
   end
   
   def <<(card)
