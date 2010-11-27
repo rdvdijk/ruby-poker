@@ -1,8 +1,8 @@
 # coding: UTF-8
 module Poker
   class Card
-    attr_reader :value
-    attr_reader :suit
+    include Comparable
+    attr_reader :value, :suit
 
     SUITS = [:hearts, :clubs, :spades, :diamonds]
     VALUES = [:"2",:"3",:"4",:"5",:"6",:"7",:"8",:"9",:"10", :J, :Q, :K, :A]
@@ -27,11 +27,25 @@ module Poker
     def inspect
       to_s
     end
-    
-    def ==(other)
+
+    def eql?(other)
       @value == other.value && @suit == other.suit
     end
 
+    def <=>(other)
+      value_compare = value_compare(other)
+      return value_compare unless value_compare == 0
+      SUITS.index(other.suit) <=> SUITS.index(@suit)
+    end
+    
+    def value_compare(other)
+      VALUES.index(other.value) <=> VALUES.index(@value)
+    end
+    
+    def hash
+      to_s.hash
+    end
+    
     # shorthand for new hands:
     #
     # core extentions:

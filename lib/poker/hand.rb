@@ -1,29 +1,61 @@
 # The seven cards, 5 of which make the actual hand
 require 'set'
+
 module Poker
   class Hand
+    include Comparable
     attr_reader :cards
   
-    ORDER = [:StraightFlush, :FourOfAKind, :FullHouse, :Flush, :Straight, :ThreeOfAKind, :TwoPair, :OnePair, :HighCards]
+    ORDER = [:HighCards, :OnePair, :TwoPair, :ThreeOfAKind, :Straight, :Flush, :FullHouse, :FourOfAKind, :StraightFlush]
 
     def initialize(cards)
-      @cards = cards.to_set
+     @cards = cards.to_set
+     @kind_count = Hand.kind_count(cards)
     end
 
     def <=>(other)
-      @cards.last.to_s <=> other.cards.last.to_s
+      ORDER.index(self.to_sym) <=> ORDER.index(other.to_sym)
     end
   
     def self.determine_hand(cards, hole)
       hands = (hole.cards.to_a + cards).combination(5).collect { |cards| Hand.create(cards) }
+      hands.sort.max
     end
 
     def self.create(cards)
-      ORDER.each do |hand|
+      ORDER.reverse_each do |hand|
         if const_get(hand).is?(cards)
           return const_get(hand).new(cards)
         end
       end
+    end
+    
+    def compare_kickers(cards, compare_cards)
+      cards.each_with_index do |card, i|
+        compare = (compare_cards[i].value_compare card)
+        return compare if compare != 0
+      end
+      0
+    end
+
+    # get pair cards
+    def get_pairs
+      pair_info = Hash[@kind_count.select {|value, count| count==2 }]
+      pair_cards = cards_by_value(pair_info.keys)
+    end
+    
+    def same_value(same)
+      @kind_count.select {|value, count| count==same }[0][0]
+    end
+
+    # select cards in hand of given values
+    def cards_by_value(values)
+      @cards.select { |card| values.include?(card.value) }
+    end
+    
+    def to_sym
+      class_name = self.class.to_s.split("::").last
+      class_name.to_sym
     end
   
     def to_s
@@ -41,85 +73,12 @@ module Poker
         hash[card.value] += 1
         hash
       end
-      kind_count.values
     end
     
+    # http://www.ruby-forum.com/topic/89101#171173
     def self.kind?(cards, wanted)
-      found = Hand.kind_count(cards)
+      found = Hand.kind_count(cards).values
       found.sort_by{|n| n.hash} == wanted.sort_by {|n|n.hash}
-    end
-  
-  end
-  
-  #
-  # All hand types:
-  #
-
-  class StraightFlush < Hand
-    def self.is?(cards)
-      Straight.is?(cards) && Flush.is?(cards)
-    end
-  end
-
-  class FourOfAKind < Hand
-    def self.is?(cards)
-      Hand.kind?(cards, [1,4])
-    end
-  end
-
-  class FullHouse < Hand
-    def self.is?(cards)
-      Hand.kind?(cards, [2,3])
-    end
-  end
-
-  class Flush < Hand
-    def self.is?(cards)
-      cards.collect(&:suit).uniq.size == 1
-    end
-  end
-
-  class Straight < Hand
-    # find positions in ordered values array, 
-    # difference between min and max should be exactly 5
-    def self.is?(cards)
-      value_positions = cards.inject([]) do |array,card|
-        array << Card::VALUES.index(card.value)
-        array
-      end
-
-      # special case: Ace, change position to -1 if a '2' i present
-      if value_positions.include?(0) && value_positions.include?(Card::VALUES.size-1)
-        value_positions[value_positions.index(Card::VALUES.size-1)] = -1
-      end
-    
-      return false if (value_positions.max - value_positions.min != 4)
-      true
-      HighCards.is?(cards)
-    end
-  end
-
-  class ThreeOfAKind < Hand
-    def self.is?(cards)
-      Hand.kind?(cards, [1,1,3])
-    end
-  end
-
-  class TwoPair < Hand
-    def self.is?(cards)
-      Hand.kind?(cards, [1,2,2])
-    end
-  end
-
-  class OnePair < Hand
-    def self.is?(cards)
-      Hand.kind?(cards, [1,1,1,2])
-    end
-  end
-
-  class HighCards < Hand
-    def self.is?(cards)
-      Hand.kind?(cards, [1,1,1,1,1])
     end
   end
 end

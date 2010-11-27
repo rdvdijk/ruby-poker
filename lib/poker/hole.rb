@@ -9,7 +9,7 @@ module Poker
     def initialize
       @cards = Set.new
     end
-  
+    
     def <<(card)
       raise "A hole has 2 cards" if @cards.size >= 2
       @cards << card

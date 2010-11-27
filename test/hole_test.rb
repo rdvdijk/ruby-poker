@@ -19,7 +19,7 @@ class HoleTest < ActiveSupport::TestCase
     hole = Hole.new
     assert !hole.dealt?
   end
-  
+
   test "adding a card to a hole should add the card to the hole" do
     card = @deck.random_card
     hole = Hole.new
