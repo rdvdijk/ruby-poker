@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class PlayerTest < ActiveSupport::TestCase
-
   test "initializing player without a name should fail" do
     assert_raise ArgumentError do
       Player.new
@@ -44,5 +43,4 @@ class PlayerTest < ActiveSupport::TestCase
     player.fold
     assert player.folded?
   end
-
 end

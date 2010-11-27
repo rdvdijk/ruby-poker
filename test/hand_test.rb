@@ -1,18 +1,19 @@
+# coding: UTF-8
 require 'test_helper'
 
 class HandTest < ActiveSupport::TestCase
-
   test "a 'high cards' hand should return HighCards hand" do
     hole = Hole.new
     hole << Card.new(:"2", :clubs)
     hole << Card.new(:"3", :hearts)
     
     cards = high_cards
+    cards = one_pair
     
     combinations = Hand.determine_hand(cards, hole)
     
     combinations.each do |hand|
-      #p hand
+      p hand
     end
   end
 
@@ -110,113 +111,49 @@ class HandTest < ActiveSupport::TestCase
 
   private
   
+  
+  # ♡ ♣ ♠ ♢
   def straight_flush
-    [
-      Card.new(:"5", :spades),
-      Card.new(:"6", :spades),
-      Card.new(:"7", :spades),
-      Card.new(:"8", :spades),
-      Card.new(:"9", :spades)
-    ]
+    [5.♠, 6.♠, 7.♠, 8.♠, 9.♠]
   end
   
   def four_of_a_kind
-    [
-      Card.new(:"2", :spades),
-      Card.new(:Q, :hearts),
-      Card.new(:Q, :spades),
-      Card.new(:Q, :clubs),
-      Card.new(:Q, :diamonds)
-    ]
+    [2.♠, Q.♡, Q.♠, Q.♣, Q.♢]
   end
 
   def full_house
-    [
-      Card.new(:"2", :spades),
-      Card.new(:"2", :hearts),
-      Card.new(:Q, :spades),
-      Card.new(:Q, :clubs),
-      Card.new(:Q, :diamonds)
-    ]
+    [3.♠, 3.♡, 6.♠, 6.♣, 6.♢]
   end
   
   def flush
-    [
-      Card.new(:"5", :spades),
-      Card.new(:"6", :spades),
-      Card.new(:"8", :spades),
-      Card.new(:"9", :spades),
-      Card.new(:J, :spades)
-    ]
+    [7.♠, 6.♠, 9.♠, 10.♠, Q.♠]
   end
 
   def straight
-    [
-      Card.new(:"5", :spades),
-      Card.new(:"6", :hearts),
-      Card.new(:"7", :spades),
-      Card.new(:"8", :clubs),
-      Card.new(:"9", :diamonds)
-    ]
+    [5.♠, 6.♡, 7.♠, 8.♣, 9.♢]
   end
 
   def straight_five_high
-    [
-      Card.new(:"A", :spades),
-      Card.new(:"2", :hearts),
-      Card.new(:"3", :spades),
-      Card.new(:"4", :clubs),
-      Card.new(:"5", :diamonds)
-    ]
+    [A.♠, 2.♡, 3.♠, 4.♣, 5.♢]
   end
   
   def non_consecutive_hand
-    [
-      Card.new(:"A", :spades),
-      Card.new(:"2", :hearts),
-      Card.new(:"4", :spades),
-      Card.new(:"4", :clubs),
-      Card.new(:"5", :diamonds)
-    ]
+    [A.♠, 2.♡, 4.♠, 4.♣, 5.♢]
   end
 
   def three_of_a_kind
-    [
-      Card.new(:"5", :spades),
-      Card.new(:"6", :hearts),
-      Card.new(:J, :spades),
-      Card.new(:J, :clubs),
-      Card.new(:J, :diamonds)
-    ]
+    [5.♠, 6.♡, J.♠, J.♣, J.♢]
   end
 
   def two_pair
-    [
-      Card.new(:"3", :spades),
-      Card.new(:"7", :hearts),
-      Card.new(:"7", :spades),
-      Card.new(:K, :clubs),
-      Card.new(:K, :diamonds)
-    ]
+    [3.♠, 7.♡, 7.♠, K.♣, K.♢]
   end
 
   def one_pair
-    [
-      Card.new(:"3", :spades),
-      Card.new(:"7", :hearts),
-      Card.new(:"8", :spades),
-      Card.new(:A, :clubs),
-      Card.new(:A, :diamonds)
-    ]
+    [3.♠, 7.♡, 8.♠, A.♣, A.♢]
   end
 
   def high_cards
-    [
-      Card.new(:"5", :spades),
-      Card.new(:"6", :diamonds),
-      Card.new(:"8", :hearts),
-      Card.new(:"9", :clubs),
-      Card.new(:J, :spades)
-    ]
+    [5.♠, 6.♢, 8.♡, 9.♣, J.♠]
   end
 end

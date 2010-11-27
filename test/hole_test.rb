@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class HoleTest < ActiveSupport::TestCase
-
   def setup
     @deck = Deck.new
   end
@@ -54,5 +53,4 @@ class HoleTest < ActiveSupport::TestCase
     hole.fold
     assert hole.empty?
   end
-
 end

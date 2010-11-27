@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class CardTest < ActiveSupport::TestCase
+  include Poker
 
   def setup
     @deck = Deck.new
