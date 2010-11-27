@@ -13,6 +13,23 @@ class HandTest < ActiveSupport::TestCase
     
     assert_equal expected, hand.cards
   end
+  
+  # hand order tests (a few) -------------------------------------------------
+  test "a straight flush should win from a flush" do
+    assert Hand.create([5.♠, 6.♠, 7.♠, 8.♠, 9.♠]) > Hand.create([2.♠, 3.♠, 7.♠, 8.♠, 9.♠])
+  end
+
+  test "a straight should win from a three of a kind" do
+    assert Hand.create([5.♠, 6.♡, 7.♠, 8.♣, 9.♢]) > Hand.create([5.♠, 6.♡, 9.♠, 9.♣, 9.♢])
+  end
+
+  test "a four of a kind should win from two pair" do
+    assert Hand.create([6.♠, Q.♡, Q.♠, Q.♣, Q.♢]) > Hand.create([6.♠, 6.♡, 7.♠, Q.♣, Q.♢])
+  end
+
+  test "a three of a kind should win from two pair" do
+    assert Hand.create([5.♠, 6.♡, J.♠, J.♣, J.♢]) > Hand.create([A.♠, 6.♡, 6.♠, J.♣, J.♢])
+  end
 
   # straight flush -----------------------------------------------------------
   test "a straight flush hand should be straight flush" do
