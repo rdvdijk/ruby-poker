@@ -34,11 +34,16 @@ module Poker
     end
   
     def hand
-      @hand ||= Hand.new(@table.cards, @hole)
+      @hand ||= Hand.determine_hand(@table.cards, @hole)
+    end
+    
+    def reset
+      @hand = nil
+      @hole = Hole.new
     end
   
     def to_s
-      "#{@name} (#{@hole})"
+      "#{@name} (#{@hole}) #{@hand}"
     end
   end
 end

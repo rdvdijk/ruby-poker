@@ -11,6 +11,10 @@ module Poker
     def self.is?(cards)
       Hand.kind?(cards, [2,3])
     end
+    
+    def to_s
+      "FullHouse #{cards.to_a.inspect}"
+    end
 
     # compare the value of the three cards
     # if the same: compare the value of the two cards

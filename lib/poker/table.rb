@@ -2,7 +2,7 @@ module Poker
   class Table
     attr_reader :players
     attr_reader :deck
-    attr_reader :pot
+    attr_reader :pots
     attr_reader :cards
     attr_reader :dealer
   
@@ -44,10 +44,22 @@ module Poker
       raise "Cannot deal river" unless @cards.size == 4
       add_card
     end
+    
+    def reset
+      @cards = []
+      @deck = Deck.new
+      @players.each do |player|
+        player.reset
+      end
+    end
   
     def winner
-      active_players = @players.select(&:playing?)
-      active_players.sort_by { |player| player.hand }
+      sorted = @players.select(&:playing?).sort_by(&:hand)
+      sorted.group_by{|player| player.hand}[sorted.last.hand]
+    end
+    
+    def to_s
+      "Cards on table: #{cards.inspect}"
     end
   
     private

@@ -32,7 +32,7 @@ module Poker
     end
   
     def to_s
-      "#{@cards.join(' ')}"
+      "#{@cards.to_a.join(' ')}"
     end
   end
 end

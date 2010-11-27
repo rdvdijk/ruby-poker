@@ -12,6 +12,10 @@ module Poker
       Hand.kind?(cards, [1,1,1,2])
     end
 
+    def to_s
+      "OnePair: #{@pair.inspect} + #{@kickers.inspect}"
+    end
+
     # compare the value of the pair
     # if the same: compare the 3 kickers
     def <=>(other)

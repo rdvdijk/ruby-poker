@@ -10,6 +10,10 @@ module Poker
     def self.is?(cards)
       Straight.is?(cards) && Flush.is?(cards)
     end
+    
+    def to_s
+      "StraightFlush: #{@cards.to_a.inspect}"
+    end
 
     # compare the value of the highest card
     def <=>(other)

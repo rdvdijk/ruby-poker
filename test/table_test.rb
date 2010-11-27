@@ -50,16 +50,48 @@ class TableTest < ActiveSupport::TestCase
   end
 
   test "determining the winner finds the highest winner(s)" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    @table.deal
-    @table.flop
-    @table.turn
-    @table.river
-    #winner = @table.winner
-    pending
+    # fixate randomness
+    #srand(0) # one pair
+    #srand(1) # straight
+    #srand(2) # flush
+    #srand(3) # three of a kind
+    #srand(7) # full house
+    #srand(8) # two pairs
+    #srand(73) # four of a kind
+    #srand(491) # high cards
+    #srand(512) # straight flush
+
+    add_8_players
+    
+    [0,1,2,3,7,8,73,491,512].each do |seed|
+      srand(seed)
+
+      @table.deal
+      @table.flop
+      @table.turn
+      @table.river
+
+      winner = @table.winner
+    
+      #puts winner
+      #puts @table
+
+      winner.each do |player|
+        puts player
+      end
+      
+      @table.reset
+    end
+    
   end
+  
+  private
+  
+  def add_8_players
+    (1..8).each do |id|
+      player = Player.new("Player##{id}")
+      player.sit_down @table
+    end
+  end 
 
 end

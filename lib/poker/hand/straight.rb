@@ -7,6 +7,10 @@ module Poker
       return false if (value_positions.max - value_positions.min != 4)
       HighCards.is?(cards) # no pairs
     end
+    
+    def to_s
+      "Straight #{cards.to_a.inspect}"
+    end
 
     # compare the value of the highest card
     def <=>(other)

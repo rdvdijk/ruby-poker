@@ -10,6 +10,10 @@ module Poker
     def self.is?(cards)
       cards.collect(&:suit).uniq.size == 1
     end
+    
+    def to_s
+      "Flush #{sorted_cards.inspect}"
+    end
 
     # compare the value of the high cards
     def <=>(other)

@@ -10,6 +10,10 @@ module Poker
     def self.is?(cards)
       Hand.kind?(cards, [1,1,1,1,1])
     end
+    
+    def to_s
+      "HighCards: #{sorted_cards.inspect}"
+    end
   
     # compare the highest cards
     def <=>(other)

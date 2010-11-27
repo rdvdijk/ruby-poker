@@ -12,7 +12,7 @@ module Poker
     end
     
     def to_s
-      "ThreeOfAKind: #{three_value}"
+      "ThreeOfAKind: #{@cards.to_a.inspect}"
     end
 
     # compare the value of the three of a kind
