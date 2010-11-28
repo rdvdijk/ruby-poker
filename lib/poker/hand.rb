@@ -39,8 +39,8 @@ module Poker
     end
 
     # get pair cards
-    def get_pairs
-      pair_info = Hash[@kind_count.select {|value, count| count==2 }]
+    def get_by_count(probe)
+      pair_info = Hash[@kind_count.select {|value, count| count==probe }]
       pair_cards = cards_by_value(pair_info.keys)
     end
     

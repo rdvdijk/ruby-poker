@@ -12,7 +12,7 @@ module Poker
     end
     
     def to_s
-      "StraightFlush: #{@cards.to_a.inspect}"
+      "StraightFlush: #{@sorted_cards.inspect}"
     end
 
     # compare the value of the highest card

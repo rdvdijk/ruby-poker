@@ -6,6 +6,8 @@ module Poker
       super
       @three_value = same_value(3)
       @two_value = same_value(2)
+      @three = get_by_count(3)
+      @pair = get_by_count(2)
     end
 
     def self.is?(cards)
@@ -13,7 +15,7 @@ module Poker
     end
     
     def to_s
-      "FullHouse #{cards.to_a.inspect}"
+      "FullHouse #{@three.inspect} + #{@pair.inspect}"
     end
 
     # compare the value of the three cards

@@ -4,7 +4,7 @@ module Poker
     
     def initialize(cards)
       super
-      @pair = get_pairs.sort 
+      @pair = get_by_count(2).sort 
       @kickers = (cards - @pair).sort
     end
 

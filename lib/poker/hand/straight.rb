@@ -1,7 +1,12 @@
 module Poker
   class Straight < Hand
-    # find positions in ordered values array, 
-    # difference between min and max should be exactly 4
+    def initialize(cards)
+      super
+      @sorted_cards = cards.sort
+    end
+    
+    # Difference between minimum and maximum card value is 4, and is no
+    # pair or set in the hand.
     def self.is?(cards)
       value_positions = value_positions(cards)
       return false if (value_positions.max - value_positions.min != 4)
@@ -9,10 +14,10 @@ module Poker
     end
     
     def to_s
-      "Straight #{cards.to_a.inspect}"
+      "Straight #{@sorted_cards.inspect}"
     end
 
-    # compare the value of the highest card
+    # Compare the value of the highest card.
     def <=>(other)
       return super if self.class != other.class
       value_positions = Straight.value_positions(@cards)
@@ -20,7 +25,9 @@ module Poker
       value_positions.max <=> other_positions.max
     end
 
-    # get the positions (=value) of the cards, keeping a 5-high straight in mind
+    # Get the positions (=value) of the cards, keeping a 5-high straight in mind.
+    # A 9-high straight returns: [3,4,5,6,7]
+    # A 5-hight straight returns: [-1,0,1,2,3]
     def self.value_positions(cards)
       value_positions = cards.inject([]) do |array,card|
         array << Card::VALUES.index(card.value)

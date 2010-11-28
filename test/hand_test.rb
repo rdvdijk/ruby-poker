@@ -153,7 +153,7 @@ class HandTest < ActiveSupport::TestCase
     assert ThreeOfAKind.is?(three_of_a_kind)
   end
 
-  test "a non three of a kind hand should not return two pair" do
+  test "a non three of a kind hand should not return three of a kind" do
     assert !ThreeOfAKind.is?(high_cards)
   end
 
@@ -164,10 +164,22 @@ class HandTest < ActiveSupport::TestCase
   test "a four of a kind hand should not return three of a kind" do
     assert !ThreeOfAKind.is?(four_of_a_kind)
   end
+
+  test "equal three of a kind hands should draw" do
+    three_of_a_kind1 = Hand.create(three_of_a_kind)
+    three_of_a_kind2 = Hand.create(three_of_a_kind_equal)
+    assert three_of_a_kind1 == three_of_a_kind2
+  end
   
-  test "a better three of a kind should win" do
+  test "a better three of a kind hand should win" do
     three_of_a_kind1 = Hand.create(three_of_a_kind)
     three_of_a_kind2 = Hand.create(three_of_a_kind_better)
+    assert three_of_a_kind1 < three_of_a_kind2
+  end
+
+  test "an equal three of a kind hands with better kicker should win" do
+    three_of_a_kind1 = Hand.create(three_of_a_kind)
+    three_of_a_kind2 = Hand.create(three_of_a_kind_better_kicker)
     assert three_of_a_kind1 < three_of_a_kind2
   end
 
@@ -324,8 +336,14 @@ class HandTest < ActiveSupport::TestCase
   end
 
   # three of a kind hands:
+  def three_of_a_kind_better_kicker
+    [5.♠, 7.♡, J.♠, J.♣, J.♢]
+  end
   def three_of_a_kind_better
     [5.♡, 6.♠, Q.♠, Q.♣, Q.♢]
+  end
+  def three_of_a_kind_equal
+    [5.♡, 6.♠, J.♠, J.♣, J.♢]
   end
   def three_of_a_kind
     [5.♠, 6.♡, J.♠, J.♣, J.♢]

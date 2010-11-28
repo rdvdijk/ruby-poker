@@ -1,3 +1,4 @@
+require 'set'
 module Poker
   class Deck
     attr_reader :cards

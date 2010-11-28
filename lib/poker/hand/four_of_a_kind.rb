@@ -6,6 +6,8 @@ module Poker
       super
       @four_value = same_value(4)
       @one_value = same_value(1)
+      @quad = get_by_count(4)
+      @kicker = get_by_count(1)
     end
 
     def self.is?(cards)
@@ -13,7 +15,7 @@ module Poker
     end
     
     def to_s
-      "FourOfAKind #{@cards.to_a.inspect}"
+      "FourOfAKind #{@quad.inspect} + #{@kicker}"
     end
 
     # compare the value of the four cards
