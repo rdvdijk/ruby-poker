@@ -1,0 +1,16 @@
+A ruby library for playing Texas Hold'em poker. Includes hand evaluator.
+
+The goal is to create an online poker application using this library.
+
+
+Still to-do:
+- Betting, raising, all-in, split-pots, etc.
+
+Ideas:
+- Add poker nicknames for hole cards (Anna Kournikova for Ace-King, etc.)
+- Websockets for server interaction
+- Fancy HTML5/CSS3 cards
+
+Overview of poker terms:
+- http://en.wikipedia.org/wiki/Glossary_of_poker_terms
+
