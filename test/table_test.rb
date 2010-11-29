@@ -33,20 +33,20 @@ class TableTest < ActiveSupport::TestCase
   
   test "dealing the flop should have 3 cards on the table" do
     @table.flop
-    assert 3, @table.cards.size
+    assert_equal 3, @table.cards.size
   end
 
   test "dealing the turn should have 4 cards on the table" do
     @table.flop
     @table.turn
-    assert 4, @table.cards.size
+    assert_equal 4, @table.cards.size
   end
 
   test "dealing the river should have 5 cards on the table" do
     @table.flop
     @table.turn
     @table.river
-    assert 5, @table.cards.size
+    assert_equal 5, @table.cards.size
   end
 
   test "determining the winner finds the highest winner(s)" do
