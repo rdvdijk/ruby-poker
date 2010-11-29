@@ -71,7 +71,7 @@ module Poker
       private
 
       def value
-        to_s.to_sym
+        to_s == "T" ? :"10" : to_s.to_sym
       end
 
       def check_suit(suit)
@@ -95,6 +95,6 @@ class Symbol
 end
 
 def Object.const_missing(sym)
-  super unless [:J,:Q,:K,:A].include? sym
+  super unless [:A,:K,:Q,:J,:T].include? sym
   sym
 end
