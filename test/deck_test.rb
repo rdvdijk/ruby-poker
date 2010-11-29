@@ -38,7 +38,7 @@ class CardTest < ActiveSupport::TestCase
     @deck.take_card
     assert !@deck.empty?
   end
-  
+
   # random card usage
   test "picking a random card from the deck should give a card" do
     assert_not_nil @deck.random_card

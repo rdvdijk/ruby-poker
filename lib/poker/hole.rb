@@ -6,8 +6,8 @@ module Poker
   class Hole
     attr_reader :cards
   
-    def initialize
-      @cards = Set.new
+    def initialize(cards = nil)
+      @cards = Set.new cards
     end
     
     def <<(card)
@@ -33,6 +33,10 @@ module Poker
   
     def to_s
       "#{@cards.to_a.join(' ')}"
+    end
+    
+    def ==(other)
+      @cards == other.cards
     end
   end
 end

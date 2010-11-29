@@ -6,9 +6,9 @@ module Poker
     attr_reader :cards
     attr_reader :dealer
   
-    def initialize
+    def initialize(deck = Deck.new)
       @players = []
-      @deck = Deck.new
+      @deck = deck
       @cards = []
     end
   
@@ -27,11 +27,12 @@ module Poker
   
     def deal
       2.times {
-        @players.each { |p| p.give_card @deck.random_card }
+        @players.each { |p| p.give_card @deck.take_card }
       }
     end
   
     def flop
+      burn_card
       3.times { add_card }
     end
     
@@ -45,6 +46,7 @@ module Poker
   
     def turn
       raise "Cannot deal turn" unless flop?
+      burn_card
       add_card
     end
 
@@ -54,11 +56,16 @@ module Poker
   
     def river
       raise "Cannot deal river" unless turn?
+      burn_card
       add_card
     end
     
     def river?
       @cards.size == 5
+    end
+    
+    def burn_card
+      deck.take_card
     end
     
     def reset
@@ -83,7 +90,7 @@ module Poker
     private
   
     def add_card
-      @cards << @deck.random_card
+      @cards << @deck.take_card
     end
   end
 end
