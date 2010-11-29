@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path("../test_helper", File.dirname(__FILE__))
 
 class PlayerTest < ActiveSupport::TestCase
   test "initializing player without a name should fail" do

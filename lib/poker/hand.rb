@@ -43,9 +43,9 @@ module Poker
       pair_info = Hash[@kind_count.select {|value, count| count==probe }]
       pair_cards = cards_by_value(pair_info.keys)
     end
-    
+
     def same_value(same)
-      @kind_count.select {|value, count| count==same }[0][0]
+      @kind_count.select {|value, count| count==same }.first[0]
     end
 
     # select cards in hand of given values

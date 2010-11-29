@@ -1,4 +1,5 @@
-require 'test_helper'
+# coding: UTF-8
+require File.expand_path("../test_helper", File.dirname(__FILE__))
 
 class CardTest < ActiveSupport::TestCase
   include Poker
