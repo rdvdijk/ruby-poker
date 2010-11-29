@@ -75,7 +75,7 @@ class TableTest < ActiveSupport::TestCase
   test "rigging the deck should deal cards to expected players" do
     rigged_cards = [
       5.H, 9.S, J.D, 
-      6.H, 10.S, J.S, 2.H, 
+      6.H, T.S, J.S, 2.H, 
       8.C, 7.S, 3.S, 3.H, 
       9.D, 4.S, 
       J.C]
@@ -92,7 +92,7 @@ class TableTest < ActiveSupport::TestCase
     # assert dealt cards
     table.deal
     assert_equal Hole.new([5.H, 6.H]), john.hole
-    assert_equal Hole.new([9.S, 10.S]), paul.hole
+    assert_equal Hole.new([9.S, T.S]), paul.hole
     assert_equal Hole.new([J.D, J.S]), george.hole
     
     # assert flop cards
