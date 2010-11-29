@@ -64,12 +64,8 @@ module Poker
         define_method suit do
           Card.new(value, suit) unless !check_value
         end
-        define_method suit.to_s.upcase[0,1].to_sym do
-          Card.new(value, suit) unless !check_value
-        end
-        define_method SUIT_CHARACTER[suit] do
-          Card.new(value, suit) unless !check_value
-        end
+        alias_method suit.to_s.upcase[0,1].to_sym, suit
+        alias_method SUIT_CHARACTER[suit], suit
       end
 
       private
