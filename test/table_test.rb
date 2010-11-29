@@ -61,23 +61,23 @@ class TableTest < ActiveSupport::TestCase
     #srand(491) # high cards
     #srand(512) # straight flush
 
-    add_8_players
+    pending
+    return
+
+    add_players(8)
     
-    [0,1,2,3,7,8,73,491,512].each do |seed|
+    #[0,1,2,3,7,8,73,491,512].each do |seed|
+    (0..1000).each do |seed|
       srand(seed)
+      play_round_no_folds
+      winners = @table.winners
 
-      @table.deal
-      @table.flop
-      @table.turn
-      @table.river
-
-      winner = @table.winner
-    
-      #puts winner
-      #puts @table
-
-      winner.each do |player|
-        puts player
+      if winners.size>1
+        puts "seed: #{seed} .. table: #{@table.cards.inspect}"
+        winners.each do |player|
+          puts player
+        end
+        puts
       end
       
       @table.reset
@@ -87,11 +87,18 @@ class TableTest < ActiveSupport::TestCase
   
   private
   
-  def add_8_players
-    (1..8).each do |id|
+  def add_players(size)
+    (1..size).each do |id|
       player = Player.new("Player##{id}")
       player.sit_down @table
     end
-  end 
+  end
+  
+  def play_round_no_folds
+    @table.deal
+    @table.flop
+    @table.turn
+    @table.river
+  end
 
 end

@@ -43,4 +43,15 @@ class PlayerTest < ActiveSupport::TestCase
     player.fold
     assert player.folded?
   end
+  
+  test "resetting a player should leave her without a hole or a hand" do
+    table = Table.new
+    player = Player.new("John")
+    player.sit_down(table)
+    table.deal
+    table.flop
+    player.reset
+    assert player.hole.empty?
+    assert_nil player.hand
+  end
 end

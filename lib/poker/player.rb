@@ -45,5 +45,9 @@ module Poker
     def to_s
       "#{@name} (#{@hole}) #{@hand}"
     end
+    
+    def inspect
+      to_s
+    end
   end
 end
