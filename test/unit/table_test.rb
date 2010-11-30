@@ -68,53 +68,5 @@ class TableTest < ActiveSupport::TestCase
     @table.river
     assert_equal 44, @table.deck.size
   end
-
-  # full gameplay tests
-  # [p1,p2,p3,p1,p2,p3,b1,f1,f2,f3,b2,t,b3,r]
-
-  test "rigging the deck should deal cards to expected players" do
-    rigged_cards = [
-      5.H, 9.S, J.D, 
-      6.H, T.S, J.S, 2.H, 
-      8.C, 7.S, 3.S, 3.H, 
-      9.D, 4.S, 
-      J.C]
-    rigged_deck = Deck.new(rigged_cards)
-    table = Table.new(rigged_deck)
-
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down table
-    paul.sit_down table
-    george.sit_down table
-
-    # assert dealt cards
-    table.deal
-    assert_equal Hole.new([5.H, 6.H]), john.hole
-    assert_equal Hole.new([9.S, T.S]), paul.hole
-    assert_equal Hole.new([J.D, J.S]), george.hole
-    
-    # assert flop cards
-    table.flop
-    assert_equal [8.C, 7.S, 3.S], table.cards
-    
-    # assert turn card
-    table.turn
-    assert_equal 9.D, table.cards.last
-
-    # assert river card
-    table.river
-    assert_equal J.C, table.cards.last
-    
-    # assert winner
-    winners = table.winners
-    assert_equal paul, winners.first
-    
-    # assert hands
-    assert john.hand.kind_of? Straight
-    assert paul.hand.kind_of? Straight
-    assert george.hand.kind_of? ThreeOfAKind
-  end
   
 end
