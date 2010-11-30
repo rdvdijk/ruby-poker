@@ -16,7 +16,7 @@ require File.expand_path("../test_helper", File.dirname(__FILE__))
 ##  r  = river
 class DealingTest < ActiveSupport::TestCase
 
-  test "rigging the deck should deal cards to expected players straight/straight/three-of-a-kind" do
+  test "a rigged deck should deal as expected" do
     rigged_cards = [
       5.H, 9.S, J.D, 
       6.H, T.S, J.S, 2.H, 
@@ -51,8 +51,32 @@ class DealingTest < ActiveSupport::TestCase
     # assert river card
     table.river
     assert_equal J.C, table.cards.last
+  end
 
-    # assert winner
+  test "rigging the deck should deal cards to expected players straight/straight/three-of-a-kind" do
+    rigged_cards = [
+      5.H, 9.S, J.D, 
+      6.H, T.S, J.S, 2.H, 
+      8.C, 7.S, 3.S, 3.H, 
+      9.D, 4.S, 
+      J.C
+    ]
+    rigged_deck = Deck.new(rigged_cards)
+    table = Table.new(rigged_deck)
+
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down table
+    paul.sit_down table
+    george.sit_down table
+
+    table.deal
+    table.flop
+    table.turn
+    table.river
+
+    # assert winner (the highest straight)
     winners = table.winners
     assert_equal paul, winners.first
 
