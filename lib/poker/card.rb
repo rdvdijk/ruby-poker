@@ -55,7 +55,7 @@ module Poker
     #   8.hearts
     #   J.♡
     #   5.H
-    module Of
+    module Shorthand
       def of(suit)
         Card.new(to_s.to_sym, suit.to_sym) unless (!check_suit(suit.to_sym) or !check_value)
       end
@@ -87,11 +87,11 @@ module Poker
 end
 
 class Fixnum
-  include Poker::Card::Of
+  include Poker::Card::Shorthand
 end
 
 class Symbol
-  include Poker::Card::Of
+  include Poker::Card::Shorthand
 end
 
 def Object.const_missing(sym)
