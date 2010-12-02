@@ -18,7 +18,7 @@ module Poker
   
     def add_player(player)
       raise "A table can hold a maximum of 10 players" if @players.size >= 10
-      @players << player
+      @players << player unless @players.include? player
     end
   
     def has_player?(player)

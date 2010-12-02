@@ -13,7 +13,14 @@ class TableTest < ActiveSupport::TestCase
   test "adding a player to a table should add the player" do
     player = Player.new("John")
     player.sit_down @table
-    @table.has_player? player
+    assert @table.has_player? player
+  end
+
+  test "adding a player twice to a table should not add the player twice" do
+    player = Player.new("John")
+    player.sit_down @table
+    player.sit_down @table
+    assert_equal 1, @table.players.size
   end
   
   test "adding an 11th player to the table should fail" do
