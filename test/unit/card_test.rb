@@ -20,6 +20,12 @@ class CardTest < ActiveSupport::TestCase
     end
   end
 
+  test "creating a card with a wrong shorthand value should fail" do
+    assert_raise NameError do
+      card = X.♠
+    end
+  end
+
   test "creating a card with a wrong suit should fail" do
     assert_raise ArgumentError do
       card = Card.new(:A, :squirrels)
