@@ -22,6 +22,12 @@ class TableTest < ActiveSupport::TestCase
     assert player.at_table? @table
   end
 
+  test "adding a player to a table should have the player sitting down" do
+    player = Player.new("John")
+    player.sit_down @table
+    assert player.sitting_down?
+  end
+
   test "adding a player twice to a table should not add the player twice" do
     player = Player.new("John")
     player.sit_down @table

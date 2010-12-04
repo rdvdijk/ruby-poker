@@ -33,6 +33,10 @@ module Poker
       @table.add_player self
     end
     
+    def sitting_down?
+      @table != nil
+    end
+    
     def stand_up
       @table.remove_player self
       @table = nil
