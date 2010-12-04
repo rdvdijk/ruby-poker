@@ -32,6 +32,15 @@ module Poker
       @table = table
       @table.add_player self
     end
+    
+    def stand_up
+      @table.remove_player self
+      @table = nil
+    end
+    
+    def at_table?(table)
+      @table.has_player? self
+    end
   
     def hand
       @hand ||= Hand.determine_hand(@table.cards, @hole)

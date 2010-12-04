@@ -16,11 +16,24 @@ class TableTest < ActiveSupport::TestCase
     assert @table.has_player? player
   end
 
+  test "adding a player to a table should have the player at table" do
+    player = Player.new("John")
+    player.sit_down @table
+    assert player.at_table? @table
+  end
+
   test "adding a player twice to a table should not add the player twice" do
     player = Player.new("John")
     player.sit_down @table
     player.sit_down @table
     assert_equal 1, @table.players.size
+  end
+  
+  test "removing a player from a table should remove the player" do
+    player = Player.new("John")
+    player.sit_down @table
+    player.stand_up
+    assert !(@table.has_player? player)
   end
   
   test "adding an 11th player to the table should fail" do

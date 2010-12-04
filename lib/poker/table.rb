@@ -17,14 +17,19 @@ module Poker
     end
   
     def add_player(player)
-      raise "A table can hold a maximum of 10 players" if @players.size >= 10
+      raise "A table can hold a maximum of 10 players." if @players.size >= 10
       @players << player unless @players.include? player
+    end
+    
+    def remove_player(player)
+      @players.delete player
     end
   
     def has_player?(player)
       @players.include? player
     end
   
+    # TODO check if 'empty' table?
     def deal
       2.times {
         @players.each { |p| p.give_card @deck.take_card }
