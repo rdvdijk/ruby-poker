@@ -16,12 +16,12 @@ module Poker
       "OnePair: #{@pair.inspect} + #{@kickers.inspect}"
     end
 
-    # compare the value of the pair
+    # compare the rank of the pair
     # if the same: compare the 3 kickers
     def <=>(other)
       return super if self.class != other.class
       @pair.each_with_index do |card, i|
-        compare = (other.pair[i].value_compare card)
+        compare = (other.pair[i].rank_compare card)
         return compare if compare != 0
       end
       compare_kickers(@kickers, other.kickers)

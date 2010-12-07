@@ -6,8 +6,8 @@ module Poker
     def initialize(fixed = [])
       @cards = []
       Card::SUITS.each do |suit|
-        Card::VALUES.each do |value|
-          @cards << Card.new(value, suit)
+        Card::RANKS.each do |rank|
+          @cards << Card.new(rank, suit)
         end
       end
       fixed.reverse_each do |card|

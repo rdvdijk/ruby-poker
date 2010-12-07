@@ -15,7 +15,7 @@ module Poker
       "StraightFlush: #{@sorted_cards.inspect}"
     end
 
-    # compare the value of the highest card
+    # compare the rank of the highest card
     def <=>(other)
       return super if self.class != other.class
       compare_kickers(@sorted_cards, other.sorted_cards)

@@ -4,7 +4,7 @@ require File.expand_path("../test_helper", File.dirname(__FILE__))
 class CardTest < ActiveSupport::TestCase
   include Poker
 
-  test "creating a card with a value and suit should work" do
+  test "creating a card with a rank and suit should work" do
     card = Card.new(:A, :spades)
   end
   
@@ -14,13 +14,13 @@ class CardTest < ActiveSupport::TestCase
     end
   end
   
-  test "creating a card with a wrong value should fail" do
+  test "creating a card with a wrong rank should fail" do
     assert_raise ArgumentError do
       card = Card.new(:X, :spades)
     end
   end
 
-  test "creating a card with a wrong shorthand value should fail" do
+  test "creating a card with a wrong shorthand rank should fail" do
     assert_raise NameError do
       card = X.♠
     end
@@ -32,7 +32,7 @@ class CardTest < ActiveSupport::TestCase
     end
   end
 
-  test "printing a card should print proper value and suit" do
+  test "printing a card should print proper rank and suit" do
     card = Card.new(:A, :spades)
     assert_equal "A♠", card.to_s
   end

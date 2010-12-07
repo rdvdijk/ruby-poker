@@ -1,11 +1,11 @@
 module Poker
   class FourOfAKind < Hand
-    attr_reader :four_value, :one_value
+    attr_reader :four_rank, :one_rank
     
     def initialize(cards)
       super
-      @four_value = same_value(4)
-      @one_value = same_value(1)
+      @four_rank = same_rank(4)
+      @one_rank = same_rank(1)
       @quad = get_by_count(4)
       @kicker = get_by_count(1)
     end
@@ -18,13 +18,13 @@ module Poker
       "FourOfAKind #{@quad.inspect} + #{@kicker}"
     end
 
-    # compare the value of the four cards
-    # if the same: compare the value of the one card
+    # compare the rank of the four cards
+    # if the same: compare the rank of the one card
     def <=>(other)
       return super if self.class != other.class
-      four_compare = Card::VALUES.index(@four_value) <=> Card::VALUES.index(other.four_value)
+      four_compare = Card::RANKS.index(@four_rank) <=> Card::RANKS.index(other.four_rank)
       return four_compare unless four_compare == 0
-      Card::VALUES.index(@one_value) <=> Card::VALUES.index(other.one_value)
+      Card::RANKS.index(@one_rank) <=> Card::RANKS.index(other.one_rank)
     end
   end
 end

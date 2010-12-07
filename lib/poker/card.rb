@@ -2,10 +2,10 @@
 module Poker
   class Card
     include Comparable
-    attr_reader :value, :suit
+    attr_reader :rank, :suit
 
     SUITS = [:hearts, :clubs, :spades, :diamonds]
-    VALUES = [:"2",:"3",:"4",:"5",:"6",:"7",:"8",:"9",:"10", :J, :Q, :K, :A]
+    RANKS = [:"2",:"3",:"4",:"5",:"6",:"7",:"8",:"9",:"10", :J, :Q, :K, :A]
     SUIT_CHARACTER = {
       :hearts => "♡",
       :clubs => "♣", 
@@ -13,15 +13,15 @@ module Poker
       :diamonds => "♢"
     }
   
-    def initialize(value, suit)
-      raise ArgumentError.new("Illegal card value") unless VALUES.include? value
+    def initialize(rank, suit)
+      raise ArgumentError.new("Illegal card rank") unless RANKS.include? rank
       raise ArgumentError.new("Illegal suit") unless SUITS.include? suit
-      @value = value
+      @rank = rank
       @suit = suit
     end
   
     def to_s
-      "#{@value}#{SUIT_CHARACTER[@suit]}"
+      "#{@rank}#{SUIT_CHARACTER[@suit]}"
     end
   
     def inspect
@@ -29,17 +29,17 @@ module Poker
     end
 
     def eql?(other)
-      @value == other.value && @suit == other.suit
+      @rank == other.rank && @suit == other.suit
     end
 
     def <=>(other)
-      value_compare = value_compare(other)
-      return value_compare unless value_compare == 0
+      rank_compare = rank_compare(other)
+      return rank_compare unless rank_compare == 0
       SUITS.index(other.suit) <=> SUITS.index(@suit)
     end
     
-    def value_compare(other)
-      VALUES.index(other.value) <=> VALUES.index(@value)
+    def rank_compare(other)
+      RANKS.index(other.rank) <=> RANKS.index(@rank)
     end
     
     def hash
@@ -57,12 +57,12 @@ module Poker
     #   5.H
     module Shorthand
       def of(suit)
-        Card.new(to_s.to_sym, suit.to_sym) unless (!check_suit(suit.to_sym) or !check_value)
+        Card.new(to_s.to_sym, suit.to_sym) unless (!check_suit(suit.to_sym) or !check_rank)
       end
 
       Card::SUITS.each do |suit|
         define_method suit do
-          Card.new(value, suit) unless !check_value
+          Card.new(rank, suit) unless !check_rank
         end
         alias_method suit.to_s.upcase[0,1].to_sym, suit
         alias_method SUIT_CHARACTER[suit], suit
@@ -70,7 +70,7 @@ module Poker
 
       private
 
-      def value
+      def rank
         to_s == "T" ? :"10" : to_s.to_sym
       end
 
@@ -78,8 +78,8 @@ module Poker
         Card::SUITS.include? suit
       end
 
-      def check_value
-        Card::VALUES.include? value
+      def check_rank
+        Card::RANKS.include? rank
       end
     end
 

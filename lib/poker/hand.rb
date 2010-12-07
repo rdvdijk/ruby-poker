@@ -10,7 +10,7 @@ module Poker
 
     def initialize(cards)
      @cards = cards.to_set
-     @value_count = Hand.value_count(cards)
+     @rank_count = Hand.rank_count(cards)
     end
 
     def <=>(other)
@@ -32,7 +32,7 @@ module Poker
     
     def compare_kickers(cards, compare_cards)
       cards.each_with_index do |card, i|
-        compare = (compare_cards[i].value_compare card)
+        compare = (compare_cards[i].rank_compare card)
         return compare if compare != 0
       end
       0
@@ -40,17 +40,17 @@ module Poker
 
     # get pair cards
     def get_by_count(probe)
-      pair_info = Hash[@value_count.select {|value, count| count==probe }]
-      pair_cards = cards_by_value(pair_info.keys)
+      pair_info = Hash[@rank_count.select {|rank, count| count==probe }]
+      pair_cards = cards_by_rank(pair_info.keys)
     end
 
-    def same_value(same)
-      @value_count.select {|value, count| count==same }.first[0]
+    def same_rank(same)
+      @rank_count.select {|rank, count| count==same }.first[0]
     end
 
-    # select cards in hand of given values
-    def cards_by_value(values)
-      @cards.select { |card| values.include?(card.value) }
+    # select cards in hand of given ranks
+    def cards_by_rank(ranks)
+      @cards.select { |card| ranks.include?(card.rank) }
     end
     
     def to_sym
@@ -68,16 +68,16 @@ module Poker
   
     private
   
-    def self.value_count(cards)
-      value_count = cards.inject(Hash.new(0)) do |hash,card| 
-        hash[card.value] += 1
+    def self.rank_count(cards)
+      rank_count = cards.inject(Hash.new(0)) do |hash,card| 
+        hash[card.rank] += 1
         hash
       end
     end
     
     # http://www.ruby-forum.com/topic/89101#171173
     def self.kind?(cards, wanted)
-      found = Hand.value_count(cards).values
+      found = Hand.rank_count(cards).values
       found.sort_by{|n| n.hash} == wanted.sort_by {|n|n.hash}
     end
   end

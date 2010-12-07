@@ -15,7 +15,7 @@ module Poker
       "Flush #{sorted_cards.inspect}"
     end
 
-    # compare the value of the high cards
+    # compare the rank of the high cards
     def <=>(other)
       return super if self.class != other.class
       compare_kickers(@sorted_cards, other.sorted_cards)

@@ -1,11 +1,11 @@
 module Poker
   class FullHouse < Hand
-    attr_reader :three_value, :two_value
+    attr_reader :three_rank, :two_rank
     
     def initialize(cards)
       super
-      @three_value = same_value(3)
-      @two_value = same_value(2)
+      @three_rank = same_rank(3)
+      @two_rank = same_rank(2)
       @three = get_by_count(3)
       @pair = get_by_count(2)
     end
@@ -18,13 +18,13 @@ module Poker
       "FullHouse #{@three.inspect} + #{@pair.inspect}"
     end
 
-    # compare the value of the three cards
-    # if the same: compare the value of the two cards
+    # compare the rank of the three cards
+    # if the same: compare the rank of the two cards
     def <=>(other)
       return super if self.class != other.class
-      three_compare = Card::VALUES.index(@three_value) <=> Card::VALUES.index(other.three_value)
+      three_compare = Card::RANKS.index(@three_rank) <=> Card::RANKS.index(other.three_rank)
       return three_compare unless three_compare == 0
-      Card::VALUES.index(@two_value) <=> Card::VALUES.index(other.two_value)
+      Card::RANKS.index(@two_rank) <=> Card::RANKS.index(other.two_rank)
     end
   end
 end
