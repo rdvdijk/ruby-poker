@@ -49,6 +49,15 @@ class TableTest < ActiveSupport::TestCase
   end
   
   # dealing tests
+  test "dealing the players should leave a dealt table" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.deal
+    assert @table.dealt?
+  end
+
   test "dealing the players should give a hole to all players" do
     john = Player.new("John")
     paul = Player.new("Paul")
@@ -94,5 +103,53 @@ class TableTest < ActiveSupport::TestCase
     @table.river
     assert_equal 44, @table.deck.size
   end
+  
+  # state tests
+  test "a fresh table should be in start state" do
+    assert_equal :start, @table.state
+  end
+
+  test "a dealt table should be in dealt state" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.deal
+    assert_equal :dealt, @table.state
+  end
+
+  test "a flopped table should be in flopp state" do
+    @table.flop
+    assert_equal :flop, @table.state
+  end
+
+  test "a flopped and turned table should be in turn state" do
+    @table.flop
+    @table.turn
+    assert_equal :turn, @table.state
+  end
+
+  test "a flopped, turned and rivered table should be in river state" do
+    @table.flop
+    @table.turn
+    @table.river
+    assert_equal :river, @table.state
+  end
+  
+  # position tests
+  test "first player should go on first position" do
+    john = Player.new("John")
+    john.sit_down @table
+    assert_equal john, @table[0]
+  end
+
+  test "second player should go on second position" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    assert_equal paul, @table[1]
+  end
+  
   
 end
