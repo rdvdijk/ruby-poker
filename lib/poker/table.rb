@@ -20,7 +20,8 @@ module Poker
     def empty?
       players.empty?
     end
-  
+
+    # Add a player to the first empty spot on the table.
     def add_player(player)
       raise "A table can hold a maximum of 10 players." if players.size >= MAXIMUM_PLAYERS
       # TODO find first empty spot! (test)
@@ -28,16 +29,19 @@ module Poker
       @players[empty_spot] = player unless @players.include? player
     end
     
-    def [](index)
-      @players[index]
-    end
-    
+    # Remove a player from the table, and leave an empty spot where she was
+    # sitting.
     def remove_player(player)
-      @players.delete player
+      index = @players.index(player)
+      @players[index] = nil
     end
   
     def has_player?(player)
       @players.include? player
+    end
+
+    def [](index)
+      @players[index]
     end
   
     # TODO check if 'empty' table?

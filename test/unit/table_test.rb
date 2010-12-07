@@ -150,6 +150,25 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     assert_equal paul, @table[1]
   end
+
+  test "first player standing up should leave second player on second position" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    john.stand_up
+    assert_equal paul, @table[1]
+  end
+
+  test "sitting down after standing up should leave new player on first position" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    john.stand_up
+    john.sit_down @table
+    assert_equal john, @table[0]
+  end
   
   
 end
