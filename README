@@ -7,7 +7,7 @@ notation (7.♣) is not possible in 1.8.
 
 
 Still to-do:
-- Player positions/dealer/blinds
+- Dealer/blinds
 - Betting, raising, all-in, split-pots, etc.
 - Remove rigged deck, test by using mocking
 
@@ -20,4 +20,15 @@ Ideas:
 Overview of poker terms:
 - http://en.wikipedia.org/wiki/Glossary_of_poker_terms
 - http://en.wikipedia.org/wiki/List_of_playing_card_nicknames
+
+Some rules:
+- http://en.wikipedia.org/wiki/Blind_(poker)
+  "The small blind is placed by the player to the left of the dealer button
+   and the big blind is then posted by the player to the left of the person
+   sitting in the small blind.
+   The one exception to this rule is when there are only 2 players (a
+   "heads-up" game). In this case the player on the button is the small blind,
+   and the other player is the big blind."
+
+
 

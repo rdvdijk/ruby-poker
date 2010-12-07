@@ -170,5 +170,26 @@ class TableTest < ActiveSupport::TestCase
     assert_equal john, @table[0]
   end
   
+  test "position should be known by player" do
+    john = Player.new("John")
+    john.sit_down @table
+    assert_equal 0, @table.position(john)
+  end
+  
+  # dealer tests
+  test "there should be a dealer after sitting down" do
+    pending
+    # john = Player.new("John")
+    # john.sit_down @table
+    # assert_not_nil @table.dealer
+  end
+
+  test "first player added should be dealer" do
+    pending
+    # john = Player.new("John")
+    # john.sit_down @table
+    # assert_equal john, @table.dealer
+  end
+
   
 end

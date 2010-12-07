@@ -11,6 +11,7 @@ module Poker
       @players = Array.new(MAXIMUM_PLAYERS, nil)
       @deck = deck
       @cards = []
+      @dealer_position = nil
     end
     
     def players
@@ -24,16 +25,14 @@ module Poker
     # Add a player to the first empty spot on the table.
     def add_player(player)
       raise "A table can hold a maximum of 10 players." if players.size >= MAXIMUM_PLAYERS
-      # TODO find first empty spot! (test)
-      empty_spot = @players.index(nil)
-      @players[empty_spot] = player unless @players.include? player
+      @players[position(nil)] = player unless @players.include? player
+      update_buttons
     end
     
     # Remove a player from the table, and leave an empty spot where she was
     # sitting.
     def remove_player(player)
-      index = @players.index(player)
-      @players[index] = nil
+      @players[position(player)] = nil
     end
   
     def has_player?(player)
@@ -42,6 +41,10 @@ module Poker
 
     def [](index)
       @players[index]
+    end
+    
+    def position(player)
+      @players.index(player)
     end
   
     # TODO check if 'empty' table?
@@ -116,6 +119,18 @@ module Poker
       sorted.select { |player| (player.hand <=> best_hand) == 0 }      
     end
     
+    def dealer
+      @players[@dealer_position]
+    end
+    
+    def small_blind
+      @players[@small_blind_position]
+    end
+
+    def big_blidn
+      @players[@big_blind_position]
+    end
+    
     def to_s
       "Cards on table: #{cards.inspect}"
     end
@@ -124,6 +139,15 @@ module Poker
   
     def add_card
       @cards << @deck.take_card
+    end
+    
+    def update_buttons
+      return unless players.size >= 2
+      if players.size == 2
+        # dealer = small, other = big
+      else
+        # dealer, small, big
+      end
     end
   end
 end
