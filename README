@@ -10,6 +10,7 @@ Still to-do:
 - Dealer/blinds
 - Betting, raising, all-in, split-pots, etc.
 - Remove rigged deck, test by using mocking
+- Rename 'Hole' to 'Pocket'?
 
 
 Ideas:
