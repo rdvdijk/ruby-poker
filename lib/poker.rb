@@ -5,6 +5,7 @@ require 'poker/hand'
 require 'poker/player'
 require 'poker/table'
 # all hands:
+require 'poker/hand/ranked_hand'
 require 'poker/hand/high_cards'
 require 'poker/hand/one_pair'
 require 'poker/hand/two_pair'

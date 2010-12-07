@@ -1,6 +1,7 @@
 module Poker
-  class ThreeOfAKind < Hand
+  class ThreeOfAKind < RankedHand
     attr_reader :three_rank, :kickers
+    rank_counts [1,1,3]
     
     def initialize(cards)
       super
@@ -9,10 +10,6 @@ module Poker
       @kickers = (cards - @set).sort
     end
 
-    def self.is?(cards)
-      Hand.kind?(cards, [1,1,3])
-    end
-    
     def to_s
       "ThreeOfAKind: #{@set.inspect} + #{@kickers.inspect}"
     end

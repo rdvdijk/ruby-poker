@@ -1,6 +1,7 @@
 module Poker
-  class FullHouse < Hand
+  class FullHouse < RankedHand
     attr_reader :three_rank, :two_rank
+    rank_counts [2,3]
     
     def initialize(cards)
       super
@@ -10,10 +11,6 @@ module Poker
       @pair = get_by_count(2)
     end
 
-    def self.is?(cards)
-      Hand.kind?(cards, [2,3])
-    end
-    
     def to_s
       "FullHouse #{@three.inspect} + #{@pair.inspect}"
     end

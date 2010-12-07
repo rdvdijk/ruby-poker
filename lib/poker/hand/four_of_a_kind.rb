@@ -1,6 +1,7 @@
 module Poker
-  class FourOfAKind < Hand
+  class FourOfAKind < RankedHand
     attr_reader :four_rank, :one_rank
+    rank_counts [1,4]
     
     def initialize(cards)
       super
@@ -10,10 +11,6 @@ module Poker
       @kicker = get_by_count(1)
     end
 
-    def self.is?(cards)
-      Hand.kind?(cards, [1,4])
-    end
-    
     def to_s
       "FourOfAKind #{@quad.inspect} + #{@kicker}"
     end

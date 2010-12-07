@@ -1,15 +1,12 @@
 module Poker
-  class OnePair < Hand
+  class OnePair < RankedHand
     attr_reader :pair, :kickers
+    rank_counts [1,1,1,2]
     
     def initialize(cards)
       super
       @pair = get_by_count(2).sort 
       @kickers = (cards - @pair).sort
-    end
-
-    def self.is?(cards)
-      Hand.kind?(cards, [1,1,1,2])
     end
 
     def to_s

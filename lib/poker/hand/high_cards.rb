@@ -1,14 +1,11 @@
 module Poker
-  class HighCards < Hand
+  class HighCards < RankedHand
     attr_reader :sorted_cards
+    rank_counts [1,1,1,1,1]
     
     def initialize(cards)
       super
       @sorted_cards = @cards.to_a.sort
-    end
-    
-    def self.is?(cards)
-      Hand.kind?(cards, [1,1,1,1,1])
     end
     
     def to_s

@@ -38,21 +38,6 @@ module Poker
       0
     end
 
-    # get pair cards
-    def get_by_count(probe)
-      pair_info = Hash[@rank_count.select {|rank, count| count==probe }]
-      pair_cards = cards_by_rank(pair_info.keys)
-    end
-
-    def same_rank(same)
-      @rank_count.select {|rank, count| count==same }.first[0]
-    end
-
-    # select cards in hand of given ranks
-    def cards_by_rank(ranks)
-      @cards.select { |card| ranks.include?(card.rank) }
-    end
-    
     def to_sym
       class_name = self.class.to_s.split("::").last
       class_name.to_sym
@@ -73,12 +58,6 @@ module Poker
         hash[card.rank] += 1
         hash
       end
-    end
-    
-    # http://www.ruby-forum.com/topic/89101#171173
-    def self.kind?(cards, wanted)
-      found = Hand.rank_count(cards).values
-      found.sort_by{|n| n.hash} == wanted.sort_by {|n|n.hash}
-    end
+    end    
   end
 end
