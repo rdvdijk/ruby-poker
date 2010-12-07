@@ -5,13 +5,11 @@ The goal is to create an online poker application using this library.
 Note: Developed using Ruby 1.9, code breaks in 1.8. The card shorthand
 notation (7.♣) is not possible in 1.8.
 
-
 Still to-do:
-- Dealer/blinds
+- Dealer/blinds when players are sitting out
 - Betting, raising, all-in, split-pots, etc.
 - Remove rigged deck, test by using mocking
 - Rename 'Hole' to 'Pocket'?
-
 
 Ideas:
 - Add poker nicknames for hole cards (Anna Kournikova for Ace-King, etc.)
@@ -30,6 +28,3 @@ Some rules:
    The one exception to this rule is when there are only 2 players (a
    "heads-up" game). In this case the player on the button is the small blind,
    and the other player is the big blind."
-
-
-
