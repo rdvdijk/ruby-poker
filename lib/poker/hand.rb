@@ -10,7 +10,7 @@ module Poker
 
     def initialize(cards)
      @cards = cards.to_set
-     @kind_count = Hand.kind_count(cards)
+     @value_count = Hand.value_count(cards)
     end
 
     def <=>(other)
@@ -40,12 +40,12 @@ module Poker
 
     # get pair cards
     def get_by_count(probe)
-      pair_info = Hash[@kind_count.select {|value, count| count==probe }]
+      pair_info = Hash[@value_count.select {|value, count| count==probe }]
       pair_cards = cards_by_value(pair_info.keys)
     end
 
     def same_value(same)
-      @kind_count.select {|value, count| count==same }.first[0]
+      @value_count.select {|value, count| count==same }.first[0]
     end
 
     # select cards in hand of given values
@@ -68,8 +68,8 @@ module Poker
   
     private
   
-    def self.kind_count(cards)
-      kind_count = cards.inject(Hash.new(0)) do |hash,card| 
+    def self.value_count(cards)
+      value_count = cards.inject(Hash.new(0)) do |hash,card| 
         hash[card.value] += 1
         hash
       end
@@ -77,7 +77,7 @@ module Poker
     
     # http://www.ruby-forum.com/topic/89101#171173
     def self.kind?(cards, wanted)
-      found = Hand.kind_count(cards).values
+      found = Hand.value_count(cards).values
       found.sort_by{|n| n.hash} == wanted.sort_by {|n|n.hash}
     end
   end
