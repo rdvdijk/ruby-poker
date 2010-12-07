@@ -26,7 +26,6 @@ module Poker
     def add_player(player)
       raise "A table can hold a maximum of 10 players." if players.size >= MAXIMUM_PLAYERS
       @players[position(nil)] = player unless @players.include? player
-      update_buttons
     end
     
     # Remove a player from the table, and leave an empty spot where she was
@@ -60,6 +59,7 @@ module Poker
     end
     
     def flop
+      update_buttons
       burn_card
       3.times { add_card }
     end
@@ -120,15 +120,15 @@ module Poker
     end
     
     def dealer
-      @players[@dealer_position]
+      @players[@dealer_position] unless !@dealer_position
     end
     
     def small_blind
-      @players[@small_blind_position]
+      @players[@small_blind_position] unless !@small_blind_position
     end
 
     def big_blind
-      @players[@big_blind_position]
+      @players[@big_blind_position] unless !@big_blind_position
     end
     
     def to_s
@@ -142,12 +142,44 @@ module Poker
     end
     
     def update_buttons
-      return unless players.size >= 2
-      if players.size == 2
-        # dealer = small, other = big
+      if @dealer_position
+        slide_dealer
+        update_blinds
       else
-        # dealer, small, big
+        initialize_dealer
+        update_blinds
       end
+    end
+    
+    def initialize_dealer
+      return unless players.size >= 2
+      first_player_index = @players.find_index { |player| !player.nil? }
+      @dealer_position = first_player_index
+    end
+    
+    # move dealer button to next player relative to dealer
+    def slide_dealer
+      @dealer_position = @players.index(next_player(dealer))
+    end
+    
+    # determine blinds positions based on dealer
+    # exception: with 2 players, the dealer is the small blind
+    def update_blinds
+      if players.size == 2
+        small_blind_player = dealer
+      else
+        small_blind_player = next_player(dealer)
+      end
+      big_blind_player = next_player(small_blind_player)
+      
+      @small_blind_position = @players.index(small_blind_player)
+      @big_blind_position = @players.index(big_blind_player)
+    end
+    
+    def next_player(player)
+      player_index = @players.index(player)
+      ordered_players = @players[player_index..-1] + @players[0,player_index]
+      ordered_players.compact.find { |next_player| next_player != player}
     end
   end
 end

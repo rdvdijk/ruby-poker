@@ -176,20 +176,164 @@ class TableTest < ActiveSupport::TestCase
     assert_equal 0, @table.position(john)
   end
   
-  # dealer tests
-  test "there should be a dealer after sitting down" do
-    pending
-    # john = Player.new("John")
-    # john.sit_down @table
-    # assert_not_nil @table.dealer
+  # dealer and blinds tests
+  test "there shouldn't be a dealer on a table with one player" do
+    john = Player.new("John")
+    john.sit_down @table
+    assert_nil @table.dealer
   end
 
-  test "first player added should be dealer" do
-    pending
-    # john = Player.new("John")
-    # john.sit_down @table
-    # assert_equal john, @table.dealer
+  test "adding players should not result in a dealer" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    assert_nil @table.dealer
+  end
+  
+  test "dealing the flop should result in a dealer" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    assert_not_nil @table.dealer
   end
 
+  # head-to-head, first flop dealer/blinds tests:
+  test "dealing the flop head-to-head should result in the expected dealer" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    assert_equal john, @table.dealer
+  end
+
+  test "dealing the flop head-to-head should result in the expected small blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    assert_equal john, @table.small_blind
+  end
+
+  test "dealing the flop head-to-head should result in the expected big blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    assert_equal paul, @table.big_blind
+  end
+
+  # head-to-head, second flop dealer/blinds tests:
+  test "dealing the second flop head-to-head should result in the expected dealer" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    @table.reset # correct?
+    @table.flop
+    assert_equal paul, @table.dealer
+  end
+
+  test "dealing the second flop head-to-head should result in the expected small blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    @table.reset # correct?
+    @table.flop
+    assert_equal paul, @table.small_blind
+  end
+
+  test "dealing the second flop head-to-head should result in the expected big blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    @table.flop
+    @table.reset # correct?
+    @table.flop
+    assert_equal john, @table.big_blind
+  end
+  
+  # 2-plus, first flop dealer/blinds tests:
+  test "dealing the flop should result in the expected dealer" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.flop
+    assert_equal john, @table.dealer
+  end
+
+  test "dealing the flop should result in the expected small blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.flop
+    assert_equal paul, @table.small_blind
+  end
+
+  test "dealing the flop should result in the expected big blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.flop
+    assert_equal george, @table.big_blind
+  end
+
+  # 2-plus, second flop dealer/blinds tests:
+  test "dealing the second flop should result in the expected dealer" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.flop
+    @table.reset # correct?
+    @table.flop
+    assert_equal paul, @table.dealer
+  end
+
+  test "dealing the second flop should result in the expected small blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.flop
+    @table.reset # correct?
+    @table.flop
+    assert_equal george, @table.small_blind
+  end
+
+  test "dealing the second flop should result in the expected big blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.flop
+    @table.reset # correct?
+    @table.flop
+    assert_equal john, @table.big_blind
+  end
   
 end
