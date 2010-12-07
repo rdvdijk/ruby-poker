@@ -127,7 +127,7 @@ module Poker
       @players[@small_blind_position]
     end
 
-    def big_blidn
+    def big_blind
       @players[@big_blind_position]
     end
     
