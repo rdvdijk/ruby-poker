@@ -19,4 +19,5 @@ Jeweler::Tasks.new do |spec|
 
   spec.add_runtime_dependency "activesupport", "~> 3.0"
   spec.add_runtime_dependency "state_machine", "~> 0.9.4"
+  spec.add_development_dependency "mocha", "~> 0.9.9"
 end
