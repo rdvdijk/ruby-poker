@@ -70,15 +70,7 @@ class CardTest < ActiveSupport::TestCase
     @deck.shuffle
     assert_not_equal 2.♡, @deck.take_card
   end
-  
-  test "creating a fixed deck should return those cards, in order" do
-    fixed_cards = [A.♠, K.♠, Q.♠, J.♠, 10.♠]
-    fixed_deck = Deck.new(fixed_cards)
-    result = []
-    5.times { result << fixed_deck.take_card }
-    assert_equal fixed_cards, result
-  end
-  
+    
   #test "printing a deck should print" do
   #  @deck.shuffle
   #  puts @deck

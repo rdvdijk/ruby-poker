@@ -3,15 +3,12 @@ module Poker
   class Deck
     attr_reader :cards
   
-    def initialize(fixed = [])
+    def initialize
       @cards = []
       Card::SUITS.each do |suit|
         Card::RANKS.each do |rank|
           @cards << Card.new(rank, suit)
         end
-      end
-      fixed.reverse_each do |card|
-        @cards.insert(0, @cards.delete(card))
       end
     end
     

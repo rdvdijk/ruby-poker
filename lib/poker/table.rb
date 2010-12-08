@@ -9,9 +9,9 @@ module Poker
     
     MAXIMUM_PLAYERS = 10
   
-    def initialize(deck = Deck.new)
+    def initialize
       @players = Array.new(MAXIMUM_PLAYERS, nil)
-      @deck = deck
+      @deck = Deck.new
       @board = Board.new(self)
       @dealer_position = nil
       super() # intialize state_machine

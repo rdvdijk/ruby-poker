@@ -24,8 +24,9 @@ class DealingTest < ActiveSupport::TestCase
       9.D, 4.S, 
       J.C
     ]
-    rigged_deck = Deck.new(rigged_cards)
-    table = Table.new(rigged_deck)
+    
+    Deck.any_instance.stubs(:take_card).returns(*rigged_cards)
+    table = Table.new
 
     john = Player.new("John")
     paul = Player.new("Paul")
@@ -61,8 +62,8 @@ class DealingTest < ActiveSupport::TestCase
       9.D, 4.S, 
       J.C
     ]
-    rigged_deck = Deck.new(rigged_cards)
-    table = Table.new(rigged_deck)
+    Deck.any_instance.stubs(:take_card).returns(*rigged_cards)
+    table = Table.new
 
     john = Player.new("John")
     paul = Player.new("Paul")

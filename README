@@ -9,7 +9,6 @@ Still to-do:
 - Betting, raising, all-in, split-pots, etc.
 - Add generic compare to RankedHand
 - Dealer/blinds when players are sitting out
-- Remove rigged deck, test by using mocking.
 
 Ideas:
 - Add poker nicknames for hole cards (Anna Kournikova for Ace-King, etc.)
