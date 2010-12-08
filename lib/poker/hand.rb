@@ -10,7 +10,6 @@ module Poker
 
     def initialize(cards)
      @cards = cards.to_set
-     @rank_count = Hand.rank_count(cards)
     end
 
     def <=>(other)
@@ -28,6 +27,7 @@ module Poker
           return const_get(hand).new(cards)
         end
       end
+      nil
     end
     
     def compare_kickers(cards, compare_cards)
@@ -50,14 +50,5 @@ module Poker
     def inspect
       self.class.to_s + ":" + to_s
     end
-  
-    private
-  
-    def self.rank_count(cards)
-      rank_count = cards.inject(Hash.new(0)) do |hash,card| 
-        hash[card.rank] += 1
-        hash
-      end
-    end    
   end
 end

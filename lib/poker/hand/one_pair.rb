@@ -12,7 +12,7 @@ module Poker
     def to_s
       "OnePair: #{@pair.inspect} + #{@kickers.inspect}"
     end
-
+    
     # compare the rank of the pair
     # if the same: compare the 3 kickers
     def <=>(other)
