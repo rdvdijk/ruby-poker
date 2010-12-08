@@ -42,15 +42,15 @@ class DealingTest < ActiveSupport::TestCase
 
     # assert flop cards
     table.flop
-    assert_equal [8.C, 7.S, 3.S], table.cards
+    assert_equal [8.C, 7.S, 3.S], table.board.cards
 
     # assert turn card
     table.turn
-    assert_equal 9.D, table.cards.last
+    assert_equal 9.D, table.board.cards.last
 
     # assert river card
     table.river
-    assert_equal J.C, table.cards.last
+    assert_equal J.C, table.board.cards.last
   end
 
   test "rigging the deck should deal cards to expected players straight/straight/three-of-a-kind" do

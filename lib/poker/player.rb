@@ -47,7 +47,7 @@ module Poker
     end
   
     def hand
-      @hand ||= Hand.determine_hand(@table.cards, @hole)
+      @hand ||= Hand.determine_hand(@table.board.cards, @hole)
     end
     
     def reset

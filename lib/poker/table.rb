@@ -2,7 +2,7 @@ module Poker
   class Table
     attr_reader :deck
     attr_reader :pots
-    attr_reader :cards
+    attr_reader :board
     attr_reader :dealer
     
     MAXIMUM_PLAYERS = 10
@@ -10,7 +10,7 @@ module Poker
     def initialize(deck = Deck.new)
       @players = Array.new(MAXIMUM_PLAYERS, nil)
       @deck = deck
-      @cards = []
+      @board = Board.new(@deck)
       @dealer_position = nil
     end
     
@@ -53,60 +53,34 @@ module Poker
       }
     end
 
-    # TODO: implement state machine?
     def dealt?
       players.select(&:playing?).any?
     end
     
     def flop
-      update_buttons
-      burn_card
-      3.times { add_card }
+      @board.flop
     end
     
-    def flop?
-      @cards && @cards.size == 3
-    end
-    
-    def flopped?
-      @cards && @cards.size >= 3
-    end
-  
     def turn
-      raise "Cannot deal turn" unless flop?
-      burn_card
-      add_card
+      @board.turn
     end
-
-    def turn?
-      @cards && @cards.size == 4
-    end
-  
+    
     def river
-      raise "Cannot deal river" unless turn?
-      burn_card
-      add_card
+      @board.river
     end
     
-    def river?
-      @cards.size == 5
-    end
-    
-    def burn_card
-      deck.take_card
-    end
-    
+    # TODO: implement state machine
     def state
-      return :river if river?
-      return :turn if turn?
-      return :flop if flop?
+      return :river if @board.river?
+      return :turn if @board.turn?
+      return :flop if @board.flop?
       return :dealt if dealt?
-      return :start if @cards.empty?
+      return :start if @board.cards.empty?
     end
     
     def reset
-      @cards = []
       @deck = Deck.new
+      @board.reset(deck)
       players.each do |player|
         player.reset
       end
@@ -117,6 +91,16 @@ module Poker
       sorted = players.select(&:playing?).sort_by(&:hand)
       best_hand = sorted.last.hand
       sorted.select { |player| (player.hand <=> best_hand) == 0 }      
+    end
+    
+    def update_buttons
+      if @dealer_position
+        slide_dealer
+        update_blinds
+      else
+        initialize_dealer
+        update_blinds
+      end
     end
     
     def dealer
@@ -136,20 +120,6 @@ module Poker
     end
   
     private
-  
-    def add_card
-      @cards << @deck.take_card
-    end
-    
-    def update_buttons
-      if @dealer_position
-        slide_dealer
-        update_blinds
-      else
-        initialize_dealer
-        update_blinds
-      end
-    end
     
     def initialize_dealer
       return unless players.size >= 2
