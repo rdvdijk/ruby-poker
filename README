@@ -6,14 +6,19 @@ Note: Developed using Ruby 1.9, code breaks in 1.8. The card shorthand
 notation (7.♣) is not possible in 1.8.
 
 Still to-do:
-- Betting, raising, all-in, split-pots, etc.
+- Gameplay:
+  - Bet
+  - Raise
+  - Call
+  - Fold
+  - Pot
+  - All-in
+  - Split-pots ..
 - Add generic compare to RankedHand
 - Dealer/blinds when players are sitting out
 
 Ideas:
 - Add poker nicknames for hole cards (Anna Kournikova for Ace-King, etc.)
-- Websockets for server interaction
-- Fancy HTML5/CSS3 cards
 
 Some useful wikipedia articles:
 - http://en.wikipedia.org/wiki/Glossary_of_poker_terms

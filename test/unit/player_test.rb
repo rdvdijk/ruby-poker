@@ -11,6 +11,16 @@ class PlayerTest < ActiveSupport::TestCase
     player = Player.new("John")
     assert_not_nil player
   end
+
+  test "initializing player should give a stack of 1000" do
+    player = Player.new("John")
+    assert_equal 1000, player.stack
+  end
+
+  test "initializing player with stack should give the player that stack" do
+    player = Player.new("John", 2500)
+    assert_equal 2500, player.stack
+  end
   
   test "initializing player should result in a player with an empty hole" do
     player = Player.new("John")
@@ -53,5 +63,11 @@ class PlayerTest < ActiveSupport::TestCase
     player.reset
     assert player.hole.empty?
     assert_nil player.hand
+  end
+  
+  test "collecting a blind should have the player betting that amount" do
+    player = Player.new("John")
+    player.collect_blind 5
+    assert_equal 5, player.bet
   end
 end

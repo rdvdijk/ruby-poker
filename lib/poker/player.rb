@@ -2,10 +2,14 @@ module Poker
   class Player
     attr_reader :name
     attr_reader :hole
+    attr_reader :stack
+    attr_reader :bet
   
-    def initialize(name)
+    def initialize(name, stack = 1000)
       @name = name
       @hole = Hole.new
+      @stack = stack
+      @bet = 0
     end
   
     def give_card(card)
@@ -54,7 +58,16 @@ module Poker
       @hand = nil
       @hole = Hole.new
     end
-  
+    
+    def collect_blind(amount)
+      place_bet(amount)
+    end
+
+    def place_bet(amount)
+      @bet += amount
+      @stack -= amount
+    end
+    
     def to_s
       "#{@name} (#{@hole}) #{@hand}"
     end

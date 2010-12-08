@@ -344,4 +344,31 @@ class TableTest < ActiveSupport::TestCase
     assert_equal john, @table.big_blind
   end
   
+  # collecting blinds tests:
+  test "default blinds should be 5 and 10" do
+    assert_equal 5, @table.small_blind_amount
+    assert_equal 10, @table.big_blind_amount
+  end
+
+  test "dealing should collect the small blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.deal
+    assert_equal 5, @table.small_blind.bet
+  end  
+
+  test "dealing should collect the big blind" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    george = Player.new("George")
+    john.sit_down @table
+    paul.sit_down @table
+    george.sit_down @table
+    @table.deal
+    assert_equal 10, @table.big_blind.bet
+  end  
 end

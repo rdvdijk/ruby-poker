@@ -6,6 +6,8 @@ module Poker
     attr_reader :pots
     attr_reader :board
     attr_reader :dealer
+    attr_reader :small_blind_amount
+    attr_reader :big_blind_amount
     
     MAXIMUM_PLAYERS = 10
   
@@ -14,6 +16,8 @@ module Poker
       @deck = Deck.new
       @board = Board.new(self)
       @dealer_position = nil
+      @small_blind_amount = 5
+      @big_blind_amount = 10
       super() # intialize state_machine
     end
     
@@ -70,6 +74,7 @@ module Poker
       # actions for events
       before_transition :start => :pre_flop do |table|
         table.update_buttons
+        table.collect_blinds
         table.deal_players
       end
       before_transition :pre_flop => :flop do |table|
@@ -127,6 +132,11 @@ module Poker
 
     def big_blind
       @players[@big_blind_position] unless !@big_blind_position
+    end
+    
+    def collect_blinds
+      small_blind.collect_blind small_blind_amount
+      big_blind.collect_blind big_blind_amount
     end
     
     def to_s
