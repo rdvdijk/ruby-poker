@@ -1,3 +1,5 @@
+require "state_machine"
+
 module Poker
   class Table
     attr_reader :deck
@@ -10,8 +12,9 @@ module Poker
     def initialize(deck = Deck.new)
       @players = Array.new(MAXIMUM_PLAYERS, nil)
       @deck = deck
-      @board = Board.new(@deck)
+      @board = Board.new(self)
       @dealer_position = nil
+      super() # intialize state_machine
     end
     
     def players
@@ -45,40 +48,51 @@ module Poker
     def position(player)
       @players.index(player)
     end
-  
-    # TODO check if 'empty' table?
-    def deal
+    
+    state_machine :state, :initial => :start do      
+      # the events between states:
+      event :deal do
+        transition :start => :pre_flop
+      end
+      event :deal_flop do
+        transition :pre_flop => :flop
+      end
+      event :deal_turn do
+        transition :flop => :turn
+      end
+      event :deal_river do
+        transition :turn => :river
+      end
+      event :reset do
+        transition all => :start
+      end
+      
+      # actions for events
+      before_transition :start => :pre_flop do |table|
+        table.update_buttons
+        table.deal_players
+      end
+      before_transition :pre_flop => :flop do |table|
+        table.board.deal_flop
+      end
+      before_transition :flop => :turn do |table|
+        table.board.deal_turn
+      end
+      before_transition :turn => :river do |table|
+        table.board.deal_river
+      end
+      before_transition any => :start do |table|
+        table.reset!
+      end
+    end
+    
+    def deal_players
       2.times {
         players.each { |player| player.give_card @deck.take_card }
       }
     end
-
-    def dealt?
-      players.select(&:playing?).any?
-    end
-    
-    def flop
-      @board.flop
-    end
-    
-    def turn
-      @board.turn
-    end
-    
-    def river
-      @board.river
-    end
-    
-    # TODO: implement state machine
-    def state
-      return :river if @board.river?
-      return :turn if @board.turn?
-      return :flop if @board.flop?
-      return :dealt if dealt?
-      return :start if @board.cards.empty?
-    end
-    
-    def reset
+        
+    def reset!
       @deck = Deck.new
       @board.reset(deck)
       players.each do |player|
@@ -116,7 +130,7 @@ module Poker
     end
     
     def to_s
-      "Cards on table: #{cards.inspect}"
+      "Cards on table: #{board}"
     end
   
     private

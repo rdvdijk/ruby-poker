@@ -49,7 +49,7 @@ class PlayerTest < ActiveSupport::TestCase
     player = Player.new("John")
     player.sit_down(table)
     table.deal
-    table.flop
+    table.deal_flop
     player.reset
     assert player.hole.empty?
     assert_nil player.hand

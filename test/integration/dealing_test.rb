@@ -41,15 +41,15 @@ class DealingTest < ActiveSupport::TestCase
     assert_equal Hole.new([J.D, J.S]), george.hole
 
     # assert flop cards
-    table.flop
+    table.deal_flop
     assert_equal [8.C, 7.S, 3.S], table.board.cards
 
     # assert turn card
-    table.turn
+    table.deal_turn
     assert_equal 9.D, table.board.cards.last
 
     # assert river card
-    table.river
+    table.deal_river
     assert_equal J.C, table.board.cards.last
   end
 
@@ -72,9 +72,9 @@ class DealingTest < ActiveSupport::TestCase
     george.sit_down table
 
     table.deal
-    table.flop
-    table.turn
-    table.river
+    table.deal_flop
+    table.deal_turn
+    table.deal_river
 
     # assert winner (the highest straight)
     winners = table.winners

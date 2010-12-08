@@ -18,4 +18,5 @@ Jeweler::Tasks.new do |spec|
   #spec.homepage = "http://ABC.rubyforge.org/"
 
   spec.add_runtime_dependency "activesupport", "~> 3.0"
+  spec.add_runtime_dependency "state_machine", "~> 0.9.4"
 end

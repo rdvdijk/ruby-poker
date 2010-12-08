@@ -1,4 +1,4 @@
-A ruby library for playing Texas Hold'em poker. Includes hand evaluator.
+A ruby library for playing Texas Hold'em poker.
 
 The goal is to create an online poker application using this library.
 
@@ -6,7 +6,6 @@ Note: Developed using Ruby 1.9, code breaks in 1.8. The card shorthand
 notation (7.♣) is not possible in 1.8.
 
 Still to-do:
-- Add 'board' model
 - Betting, raising, all-in, split-pots, etc.
 - Add generic compare to RankedHand
 - Dealer/blinds when players are sitting out
@@ -17,9 +16,10 @@ Ideas:
 - Websockets for server interaction
 - Fancy HTML5/CSS3 cards
 
-Overview of poker terms:
+Some useful wikipedia articles:
 - http://en.wikipedia.org/wiki/Glossary_of_poker_terms
 - http://en.wikipedia.org/wiki/List_of_playing_card_nicknames
+- http://en.wikipedia.org/wiki/Betting_in_poker
 
 Some rules:
 - http://en.wikipedia.org/wiki/Blind_(poker)

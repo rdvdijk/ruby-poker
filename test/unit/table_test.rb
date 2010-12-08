@@ -49,15 +49,6 @@ class TableTest < ActiveSupport::TestCase
   end
   
   # dealing tests
-  test "dealing the players should leave a dealt table" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    @table.deal
-    assert @table.dealt?
-  end
-
   test "dealing the players should give a hole to all players" do
     john = Player.new("John")
     paul = Player.new("Paul")
@@ -74,7 +65,7 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    @table.reset
+    @table.reset!
     assert !john.dealt?
     assert !paul.dealt?
   end
@@ -85,7 +76,7 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    @table.reset
+    @table.reset!
     assert_equal 52, @table.deck.size
   end
 
@@ -95,13 +86,13 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    @table.reset
+    @table.reset!
     assert @table.board.empty?
   end
   
   # state tests
   test "a fresh table should be in start state" do
-    assert_equal :start, @table.state
+    assert_equal :start, @table.state_name
   end
 
   test "a dealt table should be in dealt state" do
@@ -110,25 +101,28 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    assert_equal :dealt, @table.state
+    assert_equal :pre_flop, @table.state_name
   end
 
   test "a flopped table should be in flop state" do
-    @table.flop
-    assert_equal :flop, @table.state
+    @table.deal
+    @table.deal_flop
+    assert_equal :flop, @table.state_name
   end
 
   test "a flopped and turned table should be in turn state" do
-    @table.flop
-    @table.turn
-    assert_equal :turn, @table.state
+    @table.deal
+    @table.deal_flop
+    @table.deal_turn
+    assert_equal :turn, @table.state_name
   end
 
   test "a flopped, turned and rivered table should be in river state" do
-    @table.flop
-    @table.turn
-    @table.river
-    assert_equal :river, @table.state
+    @table.deal
+    @table.deal_flop
+    @table.deal_turn
+    @table.deal_river
+    assert_equal :river, @table.state_name
   end
   
   # position tests
@@ -191,8 +185,8 @@ class TableTest < ActiveSupport::TestCase
     paul = Player.new("Paul")
     john.sit_down @table
     paul.sit_down @table
-    @table.update_buttons
-    @table.flop
+    @table.deal
+    @table.deal_flop
     assert_not_nil @table.dealer
   end
 
@@ -202,8 +196,8 @@ class TableTest < ActiveSupport::TestCase
     paul = Player.new("Paul")
     john.sit_down @table
     paul.sit_down @table
-    @table.update_buttons
-    @table.flop
+    @table.deal
+    @table.deal_flop
     assert_equal john, @table.dealer
   end
 
@@ -212,8 +206,8 @@ class TableTest < ActiveSupport::TestCase
     paul = Player.new("Paul")
     john.sit_down @table
     paul.sit_down @table
-    @table.update_buttons  
-    @table.flop
+    @table.deal
+    @table.deal_flop
     assert_equal john, @table.small_blind
   end
 
@@ -222,8 +216,8 @@ class TableTest < ActiveSupport::TestCase
     paul = Player.new("Paul")
     john.sit_down @table
     paul.sit_down @table
-    @table.update_buttons
-    @table.flop
+    @table.deal
+    @table.deal_flop
     assert_equal paul, @table.big_blind
   end
 
@@ -233,11 +227,11 @@ class TableTest < ActiveSupport::TestCase
     paul = Player.new("Paul")
     john.sit_down @table
     paul.sit_down @table
-    @table.update_buttons
-    @table.flop
-    @table.reset # correct?
-    @table.update_buttons
-    @table.flop
+    @table.deal
+    @table.deal_flop
+    @table.reset
+    @table.deal
+    @table.deal_flop
     assert_equal paul, @table.dealer
   end
 
@@ -247,10 +241,10 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.update_buttons
-    @table.flop
-    @table.reset # correct?
+    @table.deal_flop
+    @table.reset! # correct?
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal paul, @table.small_blind
   end
 
@@ -260,10 +254,10 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.update_buttons
-    @table.flop
-    @table.reset # correct?
+    @table.deal_flop
+    @table.reset! # correct?
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal john, @table.big_blind
   end
   
@@ -276,7 +270,7 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     george.sit_down @table
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal john, @table.dealer
   end
 
@@ -288,7 +282,7 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     george.sit_down @table
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal paul, @table.small_blind
   end
 
@@ -300,7 +294,7 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     george.sit_down @table
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal george, @table.big_blind
   end
 
@@ -313,10 +307,10 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     george.sit_down @table
     @table.update_buttons
-    @table.flop
-    @table.reset # correct?
+    @table.deal_flop
+    @table.reset! # correct?
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal paul, @table.dealer
   end
 
@@ -328,10 +322,10 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     george.sit_down @table
     @table.update_buttons
-    @table.flop
-    @table.reset # correct?
+    @table.deal_flop
+    @table.reset! # correct?
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal george, @table.small_blind
   end
 
@@ -343,10 +337,10 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     george.sit_down @table
     @table.update_buttons
-    @table.flop
-    @table.reset # correct?
+    @table.deal_flop
+    @table.reset! # correct?
     @table.update_buttons
-    @table.flop
+    @table.deal_flop
     assert_equal john, @table.big_blind
   end
   

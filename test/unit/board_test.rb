@@ -12,38 +12,38 @@ class BoardTest < ActiveSupport::TestCase
   end
 
   test "dealing the flop should have 3 cards on the table" do
-    @board.flop
+    @board.deal_flop
     assert_equal 3, @board.cards.size
   end
 
   test "dealing the flop should take a burn card and 3 cards off the deck" do
-    @board.flop
+    @board.deal_flop
     assert_equal 48, @table.deck.size
   end
 
   test "dealing the turn should have 4 cards on the table" do
-    @board.flop
-    @board.turn
+    @board.deal_flop
+    @board.deal_turn
     assert_equal 4, @board.cards.size
   end
 
   test "dealing the turn should take two burn cards and 4 cards off the deck" do
-    @board.flop
-    @board.turn
+    @board.deal_flop
+    @board.deal_turn
     assert_equal 46, @table.deck.size
   end
 
   test "dealing the river should have 5 cards on the table" do
-    @board.flop
-    @board.turn
-    @board.river
+    @board.deal_flop
+    @board.deal_turn
+    @board.deal_river
     assert_equal 5, @board.cards.size
   end
 
   test "dealing the river should take 3 burn cards and 5 cards off the deck" do
-    @board.flop
-    @board.turn
-    @board.river
+    @board.deal_flop
+    @board.deal_turn
+    @board.deal_river
     assert_equal 44, @table.deck.size
   end
 
