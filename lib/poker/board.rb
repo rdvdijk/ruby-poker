@@ -3,8 +3,8 @@ module Poker
     attr_reader :cards
     
     def initialize(table)
-      reset!
       @table = table
+      full_reset
       super() # intialize state_machine
     end
     
@@ -33,8 +33,8 @@ module Poker
       before_transition :turn => :river do |board|
         board.deal_river
       end
-      before_transition any => :start do |board|
-        reset!
+      before_transition any => :empty do |board|
+        board.full_reset
       end
     end
     
@@ -42,7 +42,7 @@ module Poker
       @table.deck
     end
     
-    def reset!
+    def full_reset
       @cards = []
     end
     
@@ -67,6 +67,10 @@ module Poker
     def deal_river
       burn_card
       add_card
-    end    
+    end
+    
+    def to_s
+      @cards.inspect
+    end
   end
 end

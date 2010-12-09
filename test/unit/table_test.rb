@@ -65,7 +65,7 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    @table.reset!
+    @table.reset
     assert !john.dealt?
     assert !paul.dealt?
   end
@@ -76,7 +76,7 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    @table.reset!
+    @table.reset
     assert_equal 52, @table.deck.size
   end
 
@@ -86,13 +86,32 @@ class TableTest < ActiveSupport::TestCase
     john.sit_down @table
     paul.sit_down @table
     @table.deal
-    @table.reset!
-    assert @table.board.empty?
+    @table.deal_flop
+    @table.reset
+    assert @table.board.cards.empty?
   end
   
   # state tests
   test "a fresh table should be in start state" do
     assert_equal :start, @table.state_name
+  end
+
+  test "cannot deal a table without players" do
+    assert !@table.can_deal?
+  end
+  
+  test "cannot deal a table with one player" do
+    john = Player.new("John")
+    john.sit_down @table
+    assert !@table.can_deal?
+  end
+
+  test "can deal a table with two players" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
+    assert @table.can_deal?
   end
 
   test "a dealt table should be in dealt state" do
@@ -105,12 +124,20 @@ class TableTest < ActiveSupport::TestCase
   end
 
   test "a flopped table should be in flop state" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
     @table.deal
     @table.deal_flop
     assert_equal :flop, @table.state_name
   end
 
   test "a flopped and turned table should be in turn state" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
     @table.deal
     @table.deal_flop
     @table.deal_turn
@@ -118,6 +145,10 @@ class TableTest < ActiveSupport::TestCase
   end
 
   test "a flopped, turned and rivered table should be in river state" do
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down @table
+    paul.sit_down @table
     @table.deal
     @table.deal_flop
     @table.deal_turn
@@ -242,7 +273,7 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     @table.update_buttons
     @table.deal_flop
-    @table.reset! # correct?
+    @table.reset # correct?
     @table.update_buttons
     @table.deal_flop
     assert_equal paul, @table.small_blind
@@ -255,7 +286,7 @@ class TableTest < ActiveSupport::TestCase
     paul.sit_down @table
     @table.update_buttons
     @table.deal_flop
-    @table.reset! # correct?
+    @table.reset # correct?
     @table.update_buttons
     @table.deal_flop
     assert_equal john, @table.big_blind
@@ -308,7 +339,7 @@ class TableTest < ActiveSupport::TestCase
     george.sit_down @table
     @table.update_buttons
     @table.deal_flop
-    @table.reset! # correct?
+    @table.reset # correct?
     @table.update_buttons
     @table.deal_flop
     assert_equal paul, @table.dealer
@@ -323,7 +354,7 @@ class TableTest < ActiveSupport::TestCase
     george.sit_down @table
     @table.update_buttons
     @table.deal_flop
-    @table.reset! # correct?
+    @table.reset # correct?
     @table.update_buttons
     @table.deal_flop
     assert_equal george, @table.small_blind
@@ -338,7 +369,7 @@ class TableTest < ActiveSupport::TestCase
     george.sit_down @table
     @table.update_buttons
     @table.deal_flop
-    @table.reset! # correct?
+    @table.reset # correct?
     @table.update_buttons
     @table.deal_flop
     assert_equal john, @table.big_blind

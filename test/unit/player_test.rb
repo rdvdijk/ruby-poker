@@ -56,18 +56,39 @@ class PlayerTest < ActiveSupport::TestCase
   
   test "resetting a player should leave her without a hole or a hand" do
     table = Table.new
-    player = Player.new("John")
-    player.sit_down(table)
+    john = Player.new("John")
+    paul = Player.new("Paul")
+    john.sit_down table
+    paul.sit_down table
     table.deal
     table.deal_flop
-    player.reset
-    assert player.hole.empty?
-    assert_nil player.hand
+    john.reset
+    assert john.hole.empty?
+    assert_nil john.hand
   end
   
   test "collecting a blind should have the player betting that amount" do
     player = Player.new("John")
     player.collect_blind 5
     assert_equal 5, player.bet
+  end
+  
+  test "betting should raise the player's bet" do
+    player = Player.new("John")
+    player.place_bet 10
+    assert_equal 10, player.bet
+  end
+  
+  test "betting should lower the player's stack" do
+    player = Player.new("John", 1000)
+    player.place_bet 10
+    assert_equal 990, player.stack
+  end
+
+  test "a players bet and stack should add up to previous stack" do
+    stack = 1000
+    player = Player.new("John", stack)
+    player.place_bet 10
+    assert_equal stack, player.bet + player.stack
   end
 end

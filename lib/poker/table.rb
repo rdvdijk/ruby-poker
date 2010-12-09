@@ -5,19 +5,16 @@ module Poker
     attr_reader :deck
     attr_reader :pots
     attr_reader :board
-    attr_reader :dealer
-    attr_reader :small_blind_amount
-    attr_reader :big_blind_amount
+    attr_reader :small_blind_amount, :big_blind_amount
     
     MAXIMUM_PLAYERS = 10
   
     def initialize
       @players = Array.new(MAXIMUM_PLAYERS, nil)
-      @deck = Deck.new
       @board = Board.new(self)
-      @dealer_position = nil
       @small_blind_amount = 5
       @big_blind_amount = 10
+      full_reset
       super() # intialize state_machine
     end
     
@@ -27,6 +24,10 @@ module Poker
   
     def empty?
       players.empty?
+    end
+
+    def has_players?
+      players.size >= 2
     end
 
     # Add a player to the first empty spot on the table.
@@ -44,7 +45,7 @@ module Poker
     def has_player?(player)
       @players.include? player
     end
-
+    
     def [](index)
       @players[index]
     end
@@ -56,7 +57,7 @@ module Poker
     state_machine :state, :initial => :start do      
       # the events between states:
       event :deal do
-        transition :start => :pre_flop
+        transition :start => :pre_flop, :if => :has_players?
       end
       event :deal_flop do
         transition :pre_flop => :flop
@@ -87,7 +88,7 @@ module Poker
         table.board.deal_river
       end
       before_transition any => :start do |table|
-        table.reset!
+        table.full_reset
       end
     end
     
@@ -97,9 +98,10 @@ module Poker
       }
     end
         
-    def reset!
+    def full_reset
       @deck = Deck.new
-      @board.reset(deck)
+      @deck.shuffle
+      @board.reset
       players.each do |player|
         player.reset
       end
@@ -113,13 +115,8 @@ module Poker
     end
     
     def update_buttons
-      if @dealer_position
-        slide_dealer
-        update_blinds
-      else
-        initialize_dealer
-        update_blinds
-      end
+      dealer ? slide_dealer : initialize_dealer      
+      update_blinds
     end
     
     def dealer
