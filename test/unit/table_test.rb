@@ -50,41 +50,29 @@ class TableTest < ActiveSupport::TestCase
   
   # dealing tests
   test "dealing the players should give a hole to all players" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    players = sit_down 2
     @table.deal
-    assert john.dealt?
-    assert paul.dealt?
+    assert players[0].dealt?
+    assert players[1].dealt?
   end
 
   test "resetting the table should not have dealt players" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    players = sit_down 2
     @table.deal
     @table.reset
-    assert !john.dealt?
-    assert !paul.dealt?
+    assert !players[0].dealt?
+    assert !players[1].dealt?
   end
 
   test "resetting the table should have a new deck" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     @table.reset
     assert_equal 52, @table.deck.size
   end
 
   test "resetting the table should have an empty board" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     @table.deal_flop
     @table.reset
@@ -101,43 +89,30 @@ class TableTest < ActiveSupport::TestCase
   end
   
   test "cannot deal a table with one player" do
-    john = Player.new("John")
-    john.sit_down @table
+    sit_down 1
     assert !@table.can_deal?
   end
 
   test "can deal a table with two players" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     assert @table.can_deal?
   end
 
   test "a dealt table should be in dealt state" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     assert_equal :pre_flop, @table.state_name
   end
 
   test "a flopped table should be in flop state" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     @table.deal_flop
     assert_equal :flop, @table.state_name
   end
 
   test "a flopped and turned table should be in turn state" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     @table.deal_flop
     @table.deal_turn
@@ -145,10 +120,7 @@ class TableTest < ActiveSupport::TestCase
   end
 
   test "a flopped, turned and rivered table should be in river state" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     @table.deal_flop
     @table.deal_turn
@@ -158,64 +130,46 @@ class TableTest < ActiveSupport::TestCase
   
   # position tests
   test "first player should go on first position" do
-    john = Player.new("John")
-    john.sit_down @table
-    assert_equal john, @table[0]
+    players = sit_down 1
+    assert_equal players[0], @table[0]
   end
 
   test "second player should go on second position" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    assert_equal paul, @table[1]
+    players = sit_down 2
+    assert_equal players[1], @table[1]
   end
 
   test "first player standing up should leave second player on second position" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    john.stand_up
-    assert_equal paul, @table[1]
+    players = sit_down 2
+    players[0].stand_up
+    assert_equal players[1], @table[1]
   end
 
   test "sitting down after standing up should leave new player on first position" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    john.stand_up
-    john.sit_down @table
-    assert_equal john, @table[0]
+    players = sit_down 2
+    players[0].stand_up
+    players[0].sit_down @table
+    assert_equal players[0], @table[0]
   end
   
   test "position should be known by player" do
-    john = Player.new("John")
-    john.sit_down @table
-    assert_equal 0, @table.position(john)
+    players = sit_down 1
+    assert_equal 0, @table.position(players[0])
   end
   
   # dealer and blinds tests
   test "there shouldn't be a dealer on a table with one player" do
-    john = Player.new("John")
-    john.sit_down @table
+    sit_down 1
     assert_nil @table.dealer
   end
 
   test "adding players should not result in a dealer" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     assert_nil @table.dealer
   end
   
   test "dealing the flop should result in a dealer" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    sit_down 2
     @table.deal
     @table.deal_flop
     assert_not_nil @table.dealer
@@ -223,156 +177,108 @@ class TableTest < ActiveSupport::TestCase
 
   # head-to-head, first flop dealer/blinds tests:
   test "dealing the flop head-to-head should result in the expected dealer" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    players = sit_down 2
     @table.deal
     @table.deal_flop
-    assert_equal john, @table.dealer
+    assert_equal players[0], @table.dealer
   end
 
   test "dealing the flop head-to-head should result in the expected small blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    players = sit_down 2
     @table.deal
     @table.deal_flop
-    assert_equal john, @table.small_blind
+    assert_equal players[0], @table.small_blind
   end
 
   test "dealing the flop head-to-head should result in the expected big blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    players = sit_down 2
     @table.deal
     @table.deal_flop
-    assert_equal paul, @table.big_blind
+    assert_equal players[1], @table.big_blind
   end
 
   # head-to-head, second flop dealer/blinds tests:
   test "dealing the second flop head-to-head should result in the expected dealer" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
+    players = sit_down 2
     @table.deal
     @table.deal_flop
     @table.reset
     @table.deal
     @table.deal_flop
-    assert_equal paul, @table.dealer
+    assert_equal players[1], @table.dealer
   end
 
   test "dealing the second flop head-to-head should result in the expected small blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    @table.update_buttons
+    players = sit_down 2
+    @table.deal
     @table.deal_flop
-    @table.reset # correct?
-    @table.update_buttons
+    @table.reset
+    @table.deal
     @table.deal_flop
-    assert_equal paul, @table.small_blind
+    assert_equal players[1], @table.small_blind
   end
 
   test "dealing the second flop head-to-head should result in the expected big blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    john.sit_down @table
-    paul.sit_down @table
-    @table.update_buttons
+    players = sit_down 2
+    @table.deal
     @table.deal_flop
-    @table.reset # correct?
-    @table.update_buttons
+    @table.reset
+    @table.deal
     @table.deal_flop
-    assert_equal john, @table.big_blind
+    assert_equal players[0], @table.big_blind
   end
   
   # 2-plus, first flop dealer/blinds tests:
   test "dealing the flop should result in the expected dealer" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
-    @table.update_buttons
+    players = sit_down 3
+    @table.deal
     @table.deal_flop
-    assert_equal john, @table.dealer
+    assert_equal players[0], @table.dealer
   end
 
   test "dealing the flop should result in the expected small blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
-    @table.update_buttons
+    players = sit_down 3
+    @table.deal
     @table.deal_flop
-    assert_equal paul, @table.small_blind
+    assert_equal players[1], @table.small_blind
   end
 
   test "dealing the flop should result in the expected big blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
-    @table.update_buttons
+    players = sit_down 3
+    @table.deal
     @table.deal_flop
-    assert_equal george, @table.big_blind
+    assert_equal players[2], @table.big_blind
   end
 
   # 2-plus, second flop dealer/blinds tests:
   test "dealing the second flop should result in the expected dealer" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
-    @table.update_buttons
+    players = sit_down 3
+    @table.deal
     @table.deal_flop
-    @table.reset # correct?
-    @table.update_buttons
+    @table.reset
+    @table.deal
     @table.deal_flop
-    assert_equal paul, @table.dealer
+    assert_equal players[1], @table.dealer
   end
 
   test "dealing the second flop should result in the expected small blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
-    @table.update_buttons
+    players = sit_down 3
+    @table.deal
     @table.deal_flop
-    @table.reset # correct?
-    @table.update_buttons
+    @table.reset
+    @table.deal
     @table.deal_flop
-    assert_equal george, @table.small_blind
+    assert_equal players[2], @table.small_blind
   end
 
   test "dealing the second flop should result in the expected big blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
-    @table.update_buttons
+    players = sit_down 3
+    @table.deal
     @table.deal_flop
-    @table.reset # correct?
-    @table.update_buttons
+    @table.reset
+    @table.deal
     @table.deal_flop
-    assert_equal john, @table.big_blind
+    assert_equal players[0], @table.big_blind
   end
   
   # collecting blinds tests:
@@ -382,24 +288,71 @@ class TableTest < ActiveSupport::TestCase
   end
 
   test "dealing should collect the small blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
+    sit_down 3
     @table.deal
     assert_equal 5, @table.small_blind.bet
   end  
 
   test "dealing should collect the big blind" do
-    john = Player.new("John")
-    paul = Player.new("Paul")
-    george = Player.new("George")
-    john.sit_down @table
-    paul.sit_down @table
-    george.sit_down @table
+    sit_down 3
     @table.deal
     assert_equal 10, @table.big_blind.bet
-  end  
+  end
+  
+  # betting round tests:
+  test "a player can bet pre-deal" do
+    players = sit_down 3
+    assert_nothing_raised do
+      players[0].place_bet 10
+    end
+  end
+
+  test "a player can bet pre-flop" do
+    players = sit_down 3
+    assert_nothing_raised do
+      @table.deal
+      players[0].place_bet 10
+    end
+  end
+  
+  test "a player can bet between flop and turn" do
+    players = sit_down 3
+    assert_nothing_raised do
+      @table.deal
+      @table.deal_flop
+      players[0].place_bet 10
+    end
+  end
+  
+  test "a player can bet between turn and river" do
+    players = sit_down 3
+    assert_nothing_raised do
+      @table.deal
+      @table.deal_flop
+      @table.deal_turn
+      players[0].place_bet 10
+    end
+  end
+  
+  test "a player can bet after the river" do
+    players = sit_down 3
+    assert_nothing_raised do
+      @table.deal
+      @table.deal_flop
+      @table.deal_turn
+      @table.deal_river
+      players[0].place_bet 10
+    end
+  end
+  
+  private
+  
+  def sit_down(size)
+    names = ["John", "Paul", "George", "Ringo"]
+    names[0...size].inject([]) do |players, name|
+      player = Player.new(player)
+      player.sit_down @table
+      players << player
+    end
+  end
 end
