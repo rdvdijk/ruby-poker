@@ -153,8 +153,8 @@ module Poker
       @dealer_position = @players.index(next_player(dealer))
     end
     
-    # determine blinds positions based on dealer
-    # exception: with 2 players, the dealer is the small blind
+    # Determine blinds positions based on dealer position.
+    # Exception: with 2 players, the dealer is the small blind.
     def update_blinds
       if players.size == 2
         small_blind_player = dealer

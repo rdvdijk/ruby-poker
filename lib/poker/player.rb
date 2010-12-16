@@ -68,6 +68,11 @@ module Poker
       @stack -= amount
     end
     
+    # TODO test:
+    def pay(amount)
+      @stack += amount
+    end
+    
     def to_s
       "#{@name} (#{@hole}) #{@hand}"
     end

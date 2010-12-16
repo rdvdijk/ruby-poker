@@ -345,6 +345,11 @@ class TableTest < ActiveSupport::TestCase
     end
   end
   
+  # collecting bets tests
+  test "collecting the bets should put them in a pot" do
+    pending
+  end
+  
   private
   
   def sit_down(size)
