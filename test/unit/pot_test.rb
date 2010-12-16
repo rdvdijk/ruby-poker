@@ -32,7 +32,7 @@ class PotTest < ActiveSupport::TestCase
     assert_equal initial_stack+10, player.stack
   end
 
-  test "paying out to multiple players should not spill anything" do
+  test "paying out to multiple players should not spill chips" do
     @pot.add 10
     player1 = Player.new("John")
     player2 = Player.new("Paul")
@@ -42,7 +42,7 @@ class PotTest < ActiveSupport::TestCase
     assert_equal initial_stack1+initial_stack2+10, player1.stack+player2.stack
   end
 
-  test "paying out to multiple players should equally divide the pot" do
+  test "paying out an equal pot to multiple players should equally divide the pot" do
     @pot.add 10
     player1 = Player.new("John")
     player2 = Player.new("Paul")
